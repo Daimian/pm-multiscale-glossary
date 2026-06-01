@@ -1,0 +1,2891 @@
+@prefix : <https://w3id.org/emmo/domain/pm-multiscale#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://w3id.org/emmo/domain/pm-multiscale#> .
+
+<https://w3id.org/emmo/domain/pm-multiscale> rdf:type owl:Ontology ;
+                                              owl:versionIRI <https://w3id.org/emmo/domain/pm-multiscale/0.1.0> ;
+                                              owl:imports <https://w3id.org/emmo/1.0.3/disciplines/models> ,
+                                                          <https://w3id.org/emmo/1.0.3/reference/workflow> ,
+                                                          <https://w3id.org/emmo/domain/magnetic-material/1.0.0> ;
+                                              <http://purl.org/dc/terms/abstract> "An EMMO domain ontology for multi-scale computational simulation of permanent magnetic materials, covering DFT through spin dynamics to micromagnetics, with support for literature annotation and reproducibility assessment."@en ;
+                                              <http://purl.org/dc/terms/created> "2026-05-22"^^xsd:date ;
+                                              <http://purl.org/dc/terms/creator> "Generated via NEON-GPT methodology, validated L1-L4" ;
+                                              <http://purl.org/dc/terms/license> "https://creativecommons.org/licenses/by/4.0/legalcode" ;
+                                              <http://purl.org/dc/terms/title> "Permanent Magnet Multi-Scale Simulation Ontology"@en ;
+                                              rdfs:comment "v2.0.0 — CQ-driven enrichment, self-checked, ABox cleaned, strict filtered. Removed SmCo/Ferrite/AlNiCo (no-pattern leaf classes). Updated 2026-05-30."@en ;
+                                              owl:versionInfo "2.0.0" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/created
+<http://purl.org/dc/terms/created> rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/2004/02/skos/core#note
+<http://www.w3.org/2004/02/skos/core#note> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.w3.org/2001/XMLSchema#date
+xsd:date rdf:type rdfs:Datatype .
+
+
+###  http://www.w3.org/2001/XMLSchema#gYear
+xsd:gYear rdf:type rdfs:Datatype .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  https://w3id.org/emmo/domain/pm-multiscale#canRunInParallelWith
+:canRunInParallelWith rdf:type owl:ObjectProperty ,
+                               owl:SymmetricProperty ;
+                      rdfs:domain :SimulationStep ;
+                      rdfs:range :SimulationStep ;
+                      rdfs:comment "Indicates two steps have no data dependency and can execute concurrently. Symmetric: if A can run in parallel with B, then B can run in parallel with A."@en ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "canRunInParallelWith"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#cites
+:cites rdf:type owl:ObjectProperty ;
+       rdfs:domain :ScientificPublication ;
+       rdfs:range :ScientificPublication ;
+       <http://www.w3.org/2004/02/skos/core#prefLabel> "cites"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#constrains
+:constrains rdf:type owl:ObjectProperty ;
+            rdfs:domain owl:Thing ;
+            rdfs:range owl:Thing ;
+            rdfs:label "constrains" .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#evaluatedAt
+:evaluatedAt rdf:type owl:ObjectProperty ;
+             rdfs:domain owl:Thing ;
+             rdfs:range owl:Thing ;
+             rdfs:label "evaluatedAt" .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#forMaterial
+:forMaterial rdf:type owl:ObjectProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :ReportedPropertyValue ;
+             rdfs:range <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "forMaterial"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#forProperty
+:forProperty rdf:type owl:ObjectProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:domain :ReportedPropertyValue ;
+             rdfs:range owl:Class ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "forProperty"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#fromInputProperty
+:fromInputProperty rdf:type owl:ObjectProperty ;
+                   rdfs:domain :PropertyPrediction ;
+                   rdfs:range owl:Class ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "fromInputProperty"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#fromStep
+:fromStep rdf:type owl:ObjectProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:domain :ParameterHandoff ;
+          rdfs:range :SimulationStep ;
+          rdfs:comment "The upstream simulation step that produced the parameter being handed off."@en ;
+          <http://www.w3.org/2004/02/skos/core#prefLabel> "fromStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasBasisSet
+:hasBasisSet rdf:type owl:ObjectProperty ;
+             rdfs:domain :DFTConfiguration ;
+             rdfs:range :BasisSetSpecification ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "hasBasisSet"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasBoundaryCondition
+:hasBoundaryCondition rdf:type owl:ObjectProperty ;
+                      rdfs:domain :SimulationConfiguration ;
+                      rdfs:range :BoundaryCondition ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "hasBoundaryCondition"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasComputationalMethod
+:hasComputationalMethod rdf:type owl:ObjectProperty ;
+                        rdfs:domain :ReportedPropertyValue ;
+                        rdfs:range :SimulationStep ;
+                        <http://www.w3.org/2004/02/skos/core#prefLabel> "hasComputationalMethod"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasConfiguration
+:hasConfiguration rdf:type owl:ObjectProperty ;
+                  rdfs:domain :SimulationStep ;
+                  rdfs:range :SimulationConfiguration ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "hasConfiguration"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasConvergenceCriterion
+:hasConvergenceCriterion rdf:type owl:ObjectProperty ;
+                         rdfs:domain :SimulationConfiguration ;
+                         rdfs:range :ConvergenceCriterion ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "hasConvergenceCriterion"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasDataRepository
+:hasDataRepository rdf:type owl:ObjectProperty ;
+                   rdfs:domain <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+                   rdfs:range :DataRepository ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "hasDataRepository"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasDetermination
+:hasDetermination rdf:type owl:ObjectProperty ;
+                  rdfs:domain :TemperatureDependentProperty ;
+                  rdfs:range :PropertyDetermination ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "hasDetermination"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasEMMOMapping
+:hasEMMOMapping rdf:type owl:ObjectProperty ;
+                rdfs:domain owl:Class ;
+                rdfs:range owl:Class ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "hasEMMOMapping"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasExchangeCorrelationFunctional
+:hasExchangeCorrelationFunctional rdf:type owl:ObjectProperty ,
+                                           owl:FunctionalProperty ;
+                                  rdfs:domain :DFTConfiguration ;
+                                  rdfs:range :ExchangeCorrelationFunctional ;
+                                  <http://www.w3.org/2004/02/skos/core#prefLabel> "hasExchangeCorrelationFunctional"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasExperimentalValidation
+:hasExperimentalValidation rdf:type owl:ObjectProperty ;
+                           rdfs:domain :SimulationStep ;
+                           rdfs:range :ExperimentalValidation ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "hasExperimentalValidation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasInputParameter
+:hasInputParameter rdf:type owl:ObjectProperty ;
+                   rdfs:domain :SimulationStep ;
+                   rdfs:range <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+                   rdfs:comment "Relates a simulation step to a physical quantity (e.g., Ms, K1) it requires as input."@en ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "hasInputParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasKPointSampling
+:hasKPointSampling rdf:type owl:ObjectProperty ;
+                   rdfs:domain :DFTConfiguration ;
+                   rdfs:range :KPointSampling ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "hasKPointSampling"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasMaterial
+:hasMaterial rdf:type owl:ObjectProperty ;
+             rdfs:domain :SimulationStep ;
+             rdfs:range <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "hasMaterial"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasMesh
+:hasMesh rdf:type owl:ObjectProperty ,
+                  owl:FunctionalProperty ;
+         rdfs:domain :MicromagneticsConfiguration ;
+         rdfs:range :MeshSpecification ;
+         <http://www.w3.org/2004/02/skos/core#prefLabel> "hasMesh"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasMissingParameter
+:hasMissingParameter rdf:type owl:ObjectProperty ;
+                     rdfs:domain :ReproducibilityAssessment ;
+                     rdfs:range :MissingParameter ;
+                     <http://www.w3.org/2004/02/skos/core#prefLabel> "hasMissingParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasNextStep
+:hasNextStep rdf:type owl:ObjectProperty ,
+                      owl:TransitiveProperty ;
+             rdfs:domain :SimulationStep ;
+             rdfs:range :SimulationStep ;
+             rdfs:comment "Relates a simulation step to the next step in the execution chain. Transitive: if A->B->C, then A indirectly leads to C."@en ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "hasNextStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasOutputParameter
+:hasOutputParameter rdf:type owl:ObjectProperty ;
+                    rdfs:domain :SimulationStep ;
+                    rdfs:range <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+                    rdfs:comment "Relates a simulation step to a physical quantity it produces as output."@en ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "hasOutputParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasParameterHandoff
+:hasParameterHandoff rdf:type owl:ObjectProperty ;
+                     rdfs:domain :MultiScaleSimulationWorkflow ;
+                     rdfs:range :ParameterHandoff ;
+                     <http://www.w3.org/2004/02/skos/core#prefLabel> "hasParameterHandoff"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasPart
+:hasPart rdf:type owl:ObjectProperty ;
+         rdfs:domain owl:Thing ;
+         rdfs:range owl:Thing ;
+         rdfs:label "hasPart" .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasPredictionModel
+:hasPredictionModel rdf:type owl:ObjectProperty ;
+                    rdfs:domain :PropertyPrediction ;
+                    rdfs:range <https://w3id.org/emmo#EMMO_8d4962d7_9608_44f7_a2f1_82a4bb173f4a> ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "hasPredictionModel"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasPreviousStep
+:hasPreviousStep rdf:type owl:ObjectProperty ;
+                 owl:inverseOf :hasNextStep ;
+                 rdfs:domain :SimulationStep ;
+                 rdfs:range :SimulationStep ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "hasPreviousStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasProperty
+:hasProperty rdf:type owl:ObjectProperty ;
+             rdfs:domain :PermanentMagnetMaterial ;
+             rdfs:range owl:Thing ;
+             rdfs:label "hasProperty" .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasPropertySource
+:hasPropertySource rdf:type owl:ObjectProperty ;
+                   rdfs:domain :ReportedPropertyValue ;
+                   rdfs:range :PropertySource ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "hasPropertySource"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasReproducibilityAssessment
+:hasReproducibilityAssessment rdf:type owl:ObjectProperty ;
+                              rdfs:domain :ScientificPublication ;
+                              rdfs:range :ReproducibilityAssessment ;
+                              <http://www.w3.org/2004/02/skos/core#prefLabel> "hasReproducibilityAssessment"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasScaleBridgingAssumption
+:hasScaleBridgingAssumption rdf:type owl:ObjectProperty ;
+                            rdfs:domain :ParameterHandoff ;
+                            rdfs:range :ScaleBridgingAssumption ;
+                            rdfs:comment "The physical assumption justifying parameter mapping across scales in a handoff."@en ;
+                            <http://www.w3.org/2004/02/skos/core#prefLabel> "hasScaleBridgingAssumption"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasScaleLevel
+:hasScaleLevel rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain :SimulationStep ;
+               rdfs:range :ScaleLevel ;
+               rdfs:comment "The spatial/temporal scale at which a simulation step operates. Functional: each step operates at exactly one scale."@en ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "hasScaleLevel"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasSimulationStep
+:hasSimulationStep rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf <https://w3id.org/emmo#EMMO_70da982d_1810_4b01_9630_a28e216ecd9a> ;
+                   rdfs:domain :MultiScaleSimulationWorkflow ;
+                   rdfs:range :SimulationStep ;
+                   rdfs:comment "Relates a multi-scale workflow to one of its constituent simulation steps."@en ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "hasSimulationStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasSolver
+:hasSolver rdf:type owl:ObjectProperty ;
+           rdfs:domain :SimulationConfiguration ;
+           rdfs:range :SolverAlgorithm ;
+           <http://www.w3.org/2004/02/skos/core#prefLabel> "hasSolver"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasStatus
+:hasStatus rdf:type owl:ObjectProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain :SimulationStep ;
+           rdfs:range :StepStatus ;
+           <http://www.w3.org/2004/02/skos/core#prefLabel> "hasStatus"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#hasSynonym
+:hasSynonym rdf:type owl:ObjectProperty ;
+            rdfs:domain owl:Class ;
+            rdfs:range :PropertySynonym ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "hasSynonym"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isCitedBy
+:isCitedBy rdf:type owl:ObjectProperty ;
+           owl:inverseOf :cites ;
+           rdfs:domain :ScientificPublication ;
+           rdfs:range :ScientificPublication ;
+           <http://www.w3.org/2004/02/skos/core#prefLabel> "isCitedBy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isConfigurationOf
+:isConfigurationOf rdf:type owl:ObjectProperty ;
+                   owl:inverseOf :hasConfiguration ;
+                   rdfs:domain :SimulationConfiguration ;
+                   rdfs:range :SimulationStep ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "isConfigurationOf"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isDerivedFrom
+:isDerivedFrom rdf:type owl:ObjectProperty ;
+               rdfs:domain :PermanentMagnetMaterial ;
+               rdfs:range owl:Thing ;
+               rdfs:label "isDerivedFrom" .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isInputTo
+:isInputTo rdf:type owl:ObjectProperty ;
+           owl:inverseOf :hasInputParameter ;
+           rdfs:domain <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+           rdfs:range :SimulationStep ;
+           <http://www.w3.org/2004/02/skos/core#prefLabel> "isInputTo"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isMaterialOf
+:isMaterialOf rdf:type owl:ObjectProperty ;
+              owl:inverseOf :hasMaterial ;
+              rdfs:domain <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+              rdfs:range :SimulationStep ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "isMaterialOf"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isOutputOf
+:isOutputOf rdf:type owl:ObjectProperty ;
+            owl:inverseOf :hasOutputParameter ;
+            rdfs:domain <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+            rdfs:range :SimulationStep ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "isOutputOf"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isPerformerOf
+:isPerformerOf rdf:type owl:ObjectProperty ;
+               owl:inverseOf :performedBy ;
+               rdfs:domain :ResearchGroup ;
+               rdfs:range :ScientificPublication ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "isPerformerOf"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isSoftwareUsedBy
+:isSoftwareUsedBy rdf:type owl:ObjectProperty ;
+                  owl:inverseOf :usesSoftware ;
+                  rdfs:domain <https://w3id.org/emmo#EMMO_8d4962d7_9608_44f7_a2f1_82a4bb173f4a> ;
+                  rdfs:range :SimulationStep ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "isSoftwareUsedBy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#isStepOf
+:isStepOf rdf:type owl:ObjectProperty ;
+          owl:inverseOf :hasSimulationStep ;
+          rdfs:domain :SimulationStep ;
+          rdfs:range :MultiScaleSimulationWorkflow ;
+          <http://www.w3.org/2004/02/skos/core#prefLabel> "isStepOf"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#performedBy
+:performedBy rdf:type owl:ObjectProperty ;
+             rdfs:domain :ScientificPublication ;
+             rdfs:range :ResearchGroup ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "performedBy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#predictsProperty
+:predictsProperty rdf:type owl:ObjectProperty ;
+                  rdfs:domain :PropertyPrediction ;
+                  rdfs:range owl:Class ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "predictsProperty"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#reportedInPublication
+:reportedInPublication rdf:type owl:ObjectProperty ,
+                                owl:FunctionalProperty ;
+                       rdfs:domain :ReportedPropertyValue ;
+                       rdfs:range :ScientificPublication ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "reportedInPublication"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#reportsInputParameter
+:reportsInputParameter rdf:type owl:ObjectProperty ;
+                       rdfs:domain :ScientificPublication ;
+                       rdfs:range <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "reportsInputParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#reportsSimulationStep
+:reportsSimulationStep rdf:type owl:ObjectProperty ;
+                       rdfs:domain :ScientificPublication ;
+                       rdfs:range :SimulationStep ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "reportsSimulationStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#reportsValue
+:reportsValue rdf:type owl:ObjectProperty ;
+              owl:inverseOf :reportedInPublication ;
+              rdfs:domain :ScientificPublication ;
+              rdfs:range :ReportedPropertyValue ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "reportsValue"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#toStep
+:toStep rdf:type owl:ObjectProperty ,
+                 owl:FunctionalProperty ;
+        rdfs:domain :ParameterHandoff ;
+        rdfs:range :SimulationStep ;
+        rdfs:comment "The downstream simulation step that receives the parameter being handed off."@en ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel> "toStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#transfersParameter
+:transfersParameter rdf:type owl:ObjectProperty ;
+                    rdfs:domain :ParameterHandoff ;
+                    rdfs:range <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+                    rdfs:comment "The physical quantity (e.g., exchange stiffness A, Curie temperature Tc) being transferred between steps."@en ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "transfersParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#usesApproximation
+:usesApproximation rdf:type owl:ObjectProperty ;
+                   rdfs:domain :ReportedPropertyValue ;
+                   rdfs:range :SimulationApproximation ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "usesApproximation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#usesSoftware
+:usesSoftware rdf:type owl:ObjectProperty ;
+              rdfs:domain :SimulationStep ;
+              rdfs:range <https://w3id.org/emmo#EMMO_8d4962d7_9608_44f7_a2f1_82a4bb173f4a> ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "usesSoftware"@en .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://w3id.org/emmo/domain/pm-multiscale#atTemperature
+:atTemperature rdf:type owl:DatatypeProperty ;
+               rdfs:domain :TemperatureDependentProperty ;
+               rdfs:range xsd:float ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "atTemperature"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#cellSize
+:cellSize rdf:type owl:DatatypeProperty ;
+          rdfs:domain :MeshSpecification ;
+          rdfs:range xsd:float ;
+          <http://www.w3.org/2004/02/skos/core#prefLabel> "cellSize"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#chemicalComposition
+:chemicalComposition rdf:type owl:DatatypeProperty ;
+                     rdfs:domain <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+                     rdfs:range xsd:string ;
+                     <http://www.w3.org/2004/02/skos/core#prefLabel> "chemicalComposition"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#convergenceThreshold
+:convergenceThreshold rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :ConvergenceCriterion ;
+                      rdfs:range xsd:float ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "convergenceThreshold"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#cutoffEnergy
+:cutoffEnergy rdf:type owl:DatatypeProperty ;
+              rdfs:domain :BasisSetSpecification ;
+              rdfs:range xsd:float ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "cutoffEnergy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#dampingParameter
+:dampingParameter rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :SpinDynamicsConfiguration ;
+                  rdfs:range xsd:float ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "dampingParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#doi
+:doi rdf:type owl:DatatypeProperty ,
+              owl:FunctionalProperty ;
+     rdfs:domain :ScientificPublication ;
+     rdfs:range xsd:anyURI ;
+     <http://www.w3.org/2004/02/skos/core#prefLabel> "doi"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#kPointGrid
+:kPointGrid rdf:type owl:DatatypeProperty ;
+            rdfs:domain :KPointSampling ;
+            rdfs:range xsd:string ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "kPointGrid"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#meshGeometry
+:meshGeometry rdf:type owl:DatatypeProperty ;
+              rdfs:domain :MeshSpecification ;
+              rdfs:range xsd:string ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "meshGeometry"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#missingParameterName
+:missingParameterName rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :MissingParameter ;
+                      rdfs:range xsd:string ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "missingParameterName"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#numericValue
+:numericValue rdf:type owl:DatatypeProperty ;
+              rdfs:domain :TemperatureDependentProperty ;
+              rdfs:range xsd:float ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "numericValue"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#outputDataFormat
+:outputDataFormat rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://w3id.org/emmo#EMMO_8d4962d7_9608_44f7_a2f1_82a4bb173f4a> ;
+                  rdfs:range xsd:string ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "outputDataFormat"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#propertyUnit
+:propertyUnit rdf:type owl:DatatypeProperty ;
+              rdfs:domain :TemperatureDependentProperty ;
+              rdfs:range xsd:string ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "propertyUnit"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#publicationYear
+:publicationYear rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :ScientificPublication ;
+                 rdfs:range xsd:gYear ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "publicationYear"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#repositoryIdentifier
+:repositoryIdentifier rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :DataRepository ;
+                      rdfs:range xsd:anyURI ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "repositoryIdentifier"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#reproducibilityScore
+:reproducibilityScore rdf:type owl:DatatypeProperty ,
+                               owl:FunctionalProperty ;
+                      rdfs:domain :ReproducibilityAssessment ;
+                      rdfs:range xsd:float ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "reproducibilityScore"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#simulationTemperature
+:simulationTemperature rdf:type owl:DatatypeProperty ;
+                       rdfs:domain :SpinDynamicsConfiguration ;
+                       rdfs:range xsd:float ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "simulationTemperature"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#softwareVersion
+:softwareVersion rdf:type owl:DatatypeProperty ;
+                 rdfs:domain <https://w3id.org/emmo#EMMO_8d4962d7_9608_44f7_a2f1_82a4bb173f4a> ;
+                 rdfs:range xsd:string ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "softwareVersion"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#sourceLocation
+:sourceLocation rdf:type owl:DatatypeProperty ;
+                rdfs:domain :PropertySource ;
+                rdfs:range xsd:string ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "sourceLocation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#standardSIUnit
+:standardSIUnit rdf:type owl:DatatypeProperty ;
+                rdfs:domain owl:Class ;
+                rdfs:range xsd:string ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "standardSIUnit"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#stoichiometry
+:stoichiometry rdf:type owl:DatatypeProperty ;
+               rdfs:domain <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+               rdfs:range xsd:string ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "stoichiometry"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#synonymSymbol
+:synonymSymbol rdf:type owl:DatatypeProperty ;
+               rdfs:domain :PropertySynonym ;
+               rdfs:range xsd:string ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "synonymSymbol"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#uncertainty
+:uncertainty rdf:type owl:DatatypeProperty ;
+             rdfs:domain :ReportedPropertyValue ;
+             rdfs:range xsd:float ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "uncertainty"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#uncertaintyType
+:uncertaintyType rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :ReportedPropertyValue ;
+                 rdfs:range xsd:string ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "uncertaintyType"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://org.semanticweb.owlapi/error#Error1
+<http://org.semanticweb.owlapi/error#Error1> rdf:type owl:Class .
+
+
+###  http://org.semanticweb.owlapi/error#Error2
+<http://org.semanticweb.owlapi/error#Error2> rdf:type owl:Class .
+
+
+###  http://org.semanticweb.owlapi/error#Error3
+<http://org.semanticweb.owlapi/error#Error3> rdf:type owl:Class .
+
+
+###  http://www.w3.org/2002/07/owl#Class
+owl:Class rdf:type owl:Class .
+
+
+###  http://www.w3.org/2002/07/owl#Thing
+owl:Thing owl:disjointWith :NdFeB .
+
+[ rdf:type owl:Annotation ;
+   owl:annotatedSource _:genid1 ;
+   owl:annotatedProperty rdfs:comment ;
+   owl:annotatedTarget "DisjointClasses(<https://w3id.org/emmo/domain/pm-multiscale#NdFeB>) replaced by DisjointClasses(<https://w3id.org/emmo/domain/pm-multiscale#NdFeB> owl:Thing)" ;
+   rdfs:comment "Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/ on 6/1/26, 3:00 PM"
+ ] .
+
+_:genid1 rdf:type owl:Axiom ;
+          owl:annotatedSource owl:Thing ;
+          owl:annotatedProperty owl:disjointWith ;
+          owl:annotatedTarget :NdFeB ;
+          rdfs:comment "DisjointClasses(<https://w3id.org/emmo/domain/pm-multiscale#NdFeB>) replaced by DisjointClasses(<https://w3id.org/emmo/domain/pm-multiscale#NdFeB> owl:Thing)" .
+
+
+###  https://w3id.org/emmo#AtomisticModel
+<https://w3id.org/emmo#AtomisticModel> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo#Computation
+<https://w3id.org/emmo#Computation> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo#ContinuumModel
+<https://w3id.org/emmo#ContinuumModel> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10
+<https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo#ElectronicModel
+<https://w3id.org/emmo#ElectronicModel> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo#MaterialLaw
+<https://w3id.org/emmo#MaterialLaw> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo#MaterialsModel
+<https://w3id.org/emmo#MaterialsModel> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#AbsolutePermeability
+<https://w3id.org/emmo/domain/magnetic-material#AbsolutePermeability> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#AnisotropyField
+<https://w3id.org/emmo/domain/magnetic-material#AnisotropyField> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#BulkMagnet
+<https://w3id.org/emmo/domain/magnetic-material#BulkMagnet> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#CoercivityHc
+<https://w3id.org/emmo/domain/magnetic-material#CoercivityHc> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#CrystalStructure
+<https://w3id.org/emmo/domain/magnetic-material#CrystalStructure> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#CrystallineMagneticMaterial
+<https://w3id.org/emmo/domain/magnetic-material#CrystallineMagneticMaterial> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#CrystallographicOrientation
+<https://w3id.org/emmo/domain/magnetic-material#CrystallographicOrientation> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant
+<https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#ExtrinsicMagneticProperties
+<https://w3id.org/emmo/domain/magnetic-material#ExtrinsicMagneticProperties> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#Grain
+<https://w3id.org/emmo/domain/magnetic-material#Grain> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#GrainBoundaryPhase
+<https://w3id.org/emmo/domain/magnetic-material#GrainBoundaryPhase> rdf:type owl:Class ;
+                                                                    rdfs:subClassOf <http://org.semanticweb.owlapi/error#Error1> .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#InducedMagneticAnisotropy
+<https://w3id.org/emmo/domain/magnetic-material#InducedMagneticAnisotropy> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MagneticAnisotropy
+<https://w3id.org/emmo/domain/magnetic-material#MagneticAnisotropy> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial
+<https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropy
+<https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropy> rdf:type owl:Class ;
+                                                                              owl:disjointWith <https://w3id.org/emmo/domain/magnetic-material#ShapeAnisotropy> .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK1
+<https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK1> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK2
+<https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK2> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy
+<https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#MaximumEnergyProduct
+<https://w3id.org/emmo/domain/magnetic-material#MaximumEnergyProduct> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#Remanence
+<https://w3id.org/emmo/domain/magnetic-material#Remanence> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization
+<https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#ShapeAnisotropy
+<https://w3id.org/emmo/domain/magnetic-material#ShapeAnisotropy> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#UniaxialAnisotropyConstant
+<https://w3id.org/emmo/domain/magnetic-material#UniaxialAnisotropyConstant> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#UniaxialMagneticAnisotropy
+<https://w3id.org/emmo/domain/magnetic-material#UniaxialMagneticAnisotropy> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/magnetic-material#UniaxialMagnetocrystallineAnisotropy
+<https://w3id.org/emmo/domain/magnetic-material#UniaxialMagnetocrystallineAnisotropy> rdf:type owl:Class .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#AllenCahnEquation
+:AllenCahnEquation rdf:type owl:Class ;
+                   rdfs:subClassOf <https://w3id.org/emmo#ContinuumModel> ;
+                   rdfs:comment "The Allen-Cahn equation is a continuum PDE governing order-parameter evolution for phase-field modeling, used here for rotor pole shape optimization in permanent magnet motor design; it is a canonical emmo:ContinuumModel (phase-field), and no existing pm: class covers phase-field continuum equations."@en ;
+                   rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                   rdfs:label "allen-cahn equation" ;
+                   <http://www.w3.org/2004/02/skos/core#note> "What is the Allen-Cahn equation used for? — used here for rotor pole shape optimization"@en ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "allen-cahn equation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#AndersonImpurityModel
+:AndersonImpurityModel rdf:type owl:Class ;
+                       rdfs:subClassOf <https://w3id.org/emmo#ElectronicModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Andersonimpuritymodel
+:Andersonimpuritymodel rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Electronicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Anisotropyconstantk4
+:Anisotropyconstantk4 rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasScaleLevel ;
+                                        owl:hasValue :Electronicscale
+                                      ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Atomicuniaxialanisotropyconstant
+:Atomicuniaxialanisotropyconstant rdf:type owl:Class ;
+                                  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                    owl:onProperty :hasScaleLevel ;
+                                                    owl:hasValue :Atomisticscale
+                                                  ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Atomresolvedmae
+:Atomresolvedmae rdf:type owl:Class ;
+                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                   owl:onProperty :hasScaleLevel ;
+                                   owl:hasValue :Electronicscale
+                                 ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Atomresolvedmagnetocrystallineanisotropyenergy
+:Atomresolvedmagnetocrystallineanisotropyenergy rdf:type owl:Class ;
+                                                rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                                  owl:onProperty :hasScaleLevel ;
+                                                                  owl:hasValue :Atomisticscale
+                                                                ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#BasisSetSpecification
+:BasisSetSpecification rdf:type owl:Class ;
+                       rdfs:comment "The basis set type and size for a DFT calculation. For plane-wave codes (VASP): cutoff energy in eV. For LAPW codes (FLEUR): muffin-tin radius and lmax."@en ;
+                       rdfs:label "BasisSetSpecification" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "BasisSetSpecification"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#BirchMurnaghanEquationOfState
+:BirchMurnaghanEquationOfState rdf:type owl:Class ;
+                               rdfs:subClassOf <https://w3id.org/emmo#MaterialLaw> ;
+                               rdfs:comment "The Birch-Murnaghan equation of state is an empirical constitutive relation (energy vs. volume) used in ab initio workflows to extract equilibrium volume and bulk modulus; it is a MaterialLaw in EMMO terms, and no existing pm: class covers equation-of-state fitting methods."@en ;
+                               rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                               rdfs:label "birch-murnaghan equation of state" ;
+                               <http://www.w3.org/2004/02/skos/core#note> "What is the Birch-Murnaghan equation of state applied to? — extract equilibrium volume and bulk modulus from ab initio calculations"@en ;
+                               <http://www.w3.org/2004/02/skos/core#prefLabel> "birch-murnaghan equation of state"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Birchmurnaghanequationofstate
+:Birchmurnaghanequationofstate rdf:type owl:Class ;
+                               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                 owl:onProperty :hasScaleLevel ;
+                                                 owl:hasValue :Electronicscale
+                                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Blockexchangecouplingconstant
+:Blockexchangecouplingconstant rdf:type owl:Class ;
+                               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                 owl:onProperty :hasScaleLevel ;
+                                                 owl:hasValue :Mesoscopicscale
+                                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#BondedMagnet
+:BondedMagnet rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#BulkMagnet> ;
+              rdfs:comment "A bonded magnet is a composite permanent magnet form (powder in polymer/metallic binder) directly relevant to pm-multiscale simulation targets; it is a distinct subtype of magmo:BulkMagnet not currently represented as a named class in the ontology."@en ;
+              rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+              rdfs:label "bonded magnet" ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "bonded magnet"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#BoundaryCondition
+:BoundaryCondition rdf:type owl:Class ;
+                   rdfs:comment "The boundary condition applied to the simulation domain: periodic (infinite crystal), open (isolated particle), or mixed."@en ;
+                   rdfs:label "BoundaryCondition" ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "BoundaryCondition"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CahnHilliardEquation
+:CahnHilliardEquation rdf:type owl:Class ;
+                      rdfs:subClassOf <https://w3id.org/emmo#ContinuumModel> ;
+                      rdfs:comment "The Cahn-Hilliard equation is a continuum PDE governing conserved concentration-field evolution in phase-field solidification models for PM microstructure formation; it is IN_SCOPE as a continuum model component and a GAP because no existing pm: class covers phase-field PDE formulations."@en ;
+                      rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                      rdfs:label "cahn-hilliard equation" ;
+                      <http://www.w3.org/2004/02/skos/core#note> "What does the Cahn-Hilliard equation govern? — governing the conserved concentration field evolution during solidification in the CF-MPF model"@en ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "cahn-hilliard equation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Cahnhilliardequation
+:Cahnhilliardequation rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasScaleLevel ;
+                                        owl:hasValue :Mesoscopicscale
+                                      ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Chargeselfconsistency
+:Chargeselfconsistency rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Electronicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ClassicalHeisenbergModel
+:ClassicalHeisenbergModel rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/emmo#AtomisticModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Classicalheisenbergmodel
+:Classicalheisenbergmodel rdf:type owl:Class ;
+                          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                            owl:onProperty :hasScaleLevel ;
+                                            owl:hasValue :Atomisticscale
+                                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Coherentpotentialapproximation
+:Coherentpotentialapproximation rdf:type owl:Class ;
+                                rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                  owl:onProperty :hasScaleLevel ;
+                                                  owl:hasValue :Electronicscale
+                                                ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ColumnarGrains
+:ColumnarGrains rdf:type owl:Class ;
+                rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#Grain> ;
+                rdfs:comment "Columnar grains are a rigid, sortal morphological subtype of magmo:Grain (elongated, film-perpendicular orientation) not distinguished by any existing magmo: annotation; they require a new subclass under magmo:Grain to capture their pinning-site role in thin-film PM microstructure."@en ;
+                rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                rdfs:label "columnar grains" ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "columnar grains"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ComputationalDetermination
+:ComputationalDetermination rdf:type owl:Class ;
+                            rdfs:subClassOf :PropertyDetermination ;
+                            owl:disjointWith :ExperimentalDetermination ;
+                            rdfs:comment "A property value obtained through computational simulation: DFT, spin dynamics, micromagnetics, or machine-learning prediction."@en ;
+                            rdfs:label "ComputationalDetermination" ;
+                            <http://www.w3.org/2004/02/skos/core#prefLabel> "ComputationalDetermination"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ConvergenceCriterion
+:ConvergenceCriterion rdf:type owl:Class ;
+                      rdfs:comment "The threshold for declaring a simulation converged: energy difference, force residual, or magnetization change between iterations."@en ;
+                      rdfs:label "ConvergenceCriterion" ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "ConvergenceCriterion"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CrystalFieldCoefficient
+:CrystalFieldCoefficient rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropy> ;
+                         rdfs:comment "Crystal field coefficient A_lm<r^l> is an atomic-scale parameter used to compute magnetocrystalline anisotropy via Stevens operators; it is a sub-concept of the anisotropy hierarchy but not expressible by any existing magmo: class, requiring a new subclass under magmo:MagnetocrystallineAnisotropy."@en ;
+                         rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                         rdfs:label "crystal field coefficient" ;
+                         <http://www.w3.org/2004/02/skos/core#note> "What is the crystal field coefficient used to compute? — used to compute magnetocrystalline anisotropy via Stevens operator formalism"@en ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "crystal field coefficient"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CrystalFieldTheory
+:CrystalFieldTheory rdf:type owl:Class ;
+                    rdfs:subClassOf <https://w3id.org/emmo#ElectronicModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Crystalfieldtheory
+:Crystalfieldtheory rdf:type owl:Class ;
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasScaleLevel ;
+                                      owl:hasValue :Electronicscale
+                                    ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CrystallographicSite
+:CrystallographicSite rdf:type owl:Class ;
+                      rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystalStructure> ;
+                      rdfs:comment "A crystallographic site (Wyckoff position) is a sub-structural element of magmo:CrystalStructure; no existing class in the 3-tier ontology represents individual Wyckoff positions, so a new subclass is needed under magmo:CrystalStructure."@en ;
+                      rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                      rdfs:label "crystallographic site" ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "crystallographic site"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CurieBlochEquation
+:CurieBlochEquation rdf:type owl:Class ;
+                    rdfs:subClassOf <https://w3id.org/emmo#MaterialLaw> ;
+                    rdfs:comment "The Curie-Bloch equation is a phenomenological law relating magnetization to temperature (M(T) ∝ (1−T/Tc)^β); it functions as an emmo:MaterialLaw used to fit experimental or simulated M(T) curves, and no existing pm: or magmo: class captures this temperature-scaling relation."@en ;
+                    rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                    rdfs:label "curie-bloch equation" ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "curie-bloch equation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CurieTemperature
+:CurieTemperature rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/emmo#EMMO_909a0a36_2242_4a8c_a5e1_3fa6e9b42f10> ;
+                  rdfs:comment "The critical temperature above which a ferromagnet becomes paramagnetic, losing spontaneous magnetization. Nd2Fe14B: 585K, SmCo5: 1020K."@en ,
+                               "The critical temperature above which a ferromagnet becomes paramagnetic, losing spontaneous magnetization. Nd2Fe14B: 585K, SmCo5: 1020K. Not present in MagMO v1.0.0."@en ;
+                  rdfs:label "CurieTemperature" ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "CurieTemperature"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DFTConfiguration
+:DFTConfiguration rdf:type owl:Class ;
+                  rdfs:subClassOf :SimulationConfiguration ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasExchangeCorrelationFunctional ;
+                                    owl:cardinality "1"^^xsd:nonNegativeInteger
+                                  ] ;
+                  rdfs:comment "Configuration for a DFT calculation: exchange-correlation functional (PBE, LDA, GGA+U), basis set / plane-wave cutoff, k-point sampling, and spin-orbit coupling settings."@en ;
+                  rdfs:label "DFTConfiguration" ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "DFTConfiguration"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DFTStep
+:DFTStep rdf:type owl:Class ;
+         rdfs:subClassOf :SimulationStep ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasOutputParameter ;
+                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy>
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasOutputParameter ;
+                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization>
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasOutputParameter ;
+                           owl:someValuesFrom :CurieTemperature
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasConfiguration ;
+                           owl:allValuesFrom :DFTConfiguration
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasScaleLevel ;
+                           owl:hasValue :ElectronicScale
+                         ] ;
+         rdfs:comment "A density functional theory calculation that computes ground-state electronic properties: spontaneous magnetization (Ms_0), magnetocrystalline anisotropy (K1), and exchange coupling constants (Jij) from first principles."@en ;
+         rdfs:label "DFTStep" ;
+         <http://www.w3.org/2004/02/skos/core#altLabel> "fermi-dirac smearing"@en ,
+                                                        "full-potential linear muffin-tin orbital method"@en ,
+                                                        "full-potential linearized augmented plane wave (flapw) method"@en ,
+                                                        "full-potential lmto method"@en ,
+                                                        "kkr green's function method"@en ,
+                                                        "noncollinear magnetic calculation"@en ;
+         <http://www.w3.org/2004/02/skos/core#prefLabel> "DFTStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DataRepository
+:DataRepository rdf:type owl:Class ;
+                rdfs:comment "A data repository or database where material simulation data is stored and accessible via a persistent identifier."@en ;
+                rdfs:label "DataRepository" ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "DataRepository"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DipolarCouplingConstant
+:DipolarCouplingConstant rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#UniaxialAnisotropyConstant> ;
+                         rdfs:comment "Dipolar coupling constant (g_ab = M_a M_b v²) is a pairwise interaction prefactor not expressible by any existing magmo: constant class; it is a rigid Quantity analogous in role to magmo:UniaxialAnisotropyConstant but governing dipolar rather than anisotropy interactions."@en ;
+                         rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                         rdfs:label "dipolar coupling constant" ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "dipolar coupling constant"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DipolarEnergy
+:DipolarEnergy rdf:type owl:Class ;
+               rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy> ;
+               rdfs:comment "Dipolar energy is a distinct magnetic interaction energy (long-range dipole-dipole) not expressible as any existing magmo: energy class; it is a rigid Quantity under emmo:Energy and is essential for multi-scale micromagnetic simulations of permanent magnets."@en ;
+               rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+               rdfs:label "dipolar energy" ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "dipolar energy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Dipolarenergy
+:Dipolarenergy rdf:type owl:Class ;
+               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasScaleLevel ;
+                                 owl:hasValue :Mesoscopicscale
+                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainNucleation
+:DomainNucleation rdf:type owl:Class ;
+                  rdfs:subClassOf :MicromagneticsStep ;
+                  owl:disjointWith :DomainWallMotion .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallDepinningField
+:DomainWallDepinningField rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CoercivityHc> ;
+                          rdfs:comment "Domain wall depinning field is a distinct coercivity-mechanism quantity (the field required to unpin a domain wall from a defect) that is not captured by the general magmo:CoercivityHc class; it requires a new subclass to represent the pinning-limited coercivity contribution per the GAP criterion for missing mechanistic specificity."@en ;
+                          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                          rdfs:label "domain wall depinning field" ;
+                          <http://www.w3.org/2004/02/skos/core#prefLabel> "domain wall depinning field"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallEnergyDensity
+:DomainWallEnergyDensity rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy> ;
+                         rdfs:comment "Domain wall energy density (J/m²) is a distinct surface energy density quantity not expressible by magmo:MagnetocrystallineAnisotropyEnergy (a volumetric energy); it is a rigid Quantity in multi-scale permanent magnet modelling requiring a new GAP class."@en ;
+                         rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                         rdfs:label "domain wall energy density" ;
+                         <http://www.w3.org/2004/02/skos/core#note> "What does domain wall energy density drive? — drives domain wall pinning"@en ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "domain wall energy density"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallMotion
+:DomainWallMotion rdf:type owl:Class ;
+                  rdfs:subClassOf :MicromagneticsStep .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallNucleationField
+:DomainWallNucleationField rdf:type owl:Class ;
+                           rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CoercivityHc> ;
+                           rdfs:comment "Domain wall nucleation field is a distinct coercivity-mechanism quantity (the field required to nucleate a domain wall at a specific defect) that is not captured by the general magmo:CoercivityHc class; it requires a new subclass to represent the nucleation-limited coercivity contribution per the GAP criterion for missing mechanistic specificity."@en ;
+                           rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                           rdfs:label "domain wall nucleation field" ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "domain wall nucleation field"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallPropagation
+:DomainWallPropagation rdf:type owl:Class ;
+                       rdfs:subClassOf :MicromagneticsStep .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Domainwalldepinningfield
+:Domainwalldepinningfield rdf:type owl:Class ;
+                          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                            owl:onProperty :hasScaleLevel ;
+                                            owl:hasValue :Mesoscopicscale
+                                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Domainwallnucleationfield
+:Domainwallnucleationfield rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Mesoscopicscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Domainwallpinning
+:Domainwallpinning rdf:type owl:Class ;
+                   rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                     owl:onProperty :hasScaleLevel ;
+                                     owl:hasValue :Mesoscopicscale
+                                   ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Domainwallpropagation
+:Domainwallpropagation rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Mesoscopicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Dorbitalresolvedmae
+:Dorbitalresolvedmae rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Electronicscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DynamicalMeanFieldTheory
+:DynamicalMeanFieldTheory rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/emmo#ElectronicModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Dynamicalmeanfieldtheory
+:Dynamicalmeanfieldtheory rdf:type owl:Class ;
+                          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                            owl:onProperty :hasScaleLevel ;
+                                            owl:hasValue :Electronicscale
+                                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DzyaloshinskiiMoriyaInteraction
+:DzyaloshinskiiMoriyaInteraction rdf:type owl:Class ;
+                                 rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant> ;
+                                 rdfs:comment "DMI is an antisymmetric exchange interaction relevant to spin textures and domain-wall energetics in permanent-magnet interfaces; no existing magmo: class represents antisymmetric exchange, so a new sibling/subclass near magmo:ExchangeStiffnessConstant is needed."@en ;
+                                 rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                                 rdfs:label "dzyaloshinskii-moriya interaction" ;
+                                 <http://www.w3.org/2004/02/skos/core#note> "What does the Dzyaloshinskii-Moriya interaction contribute to? — contributing a chiral term to the magnetic SANS cross section"@en ;
+                                 <http://www.w3.org/2004/02/skos/core#prefLabel> "dzyaloshinskii-moriya interaction"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#EasyConeAnisotropy
+:EasyConeAnisotropy rdf:type owl:Class ;
+                    rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#UniaxialMagneticAnisotropy> ;
+                    rdfs:comment "Easy-cone anisotropy is a distinct anisotropy type (energy minimum on a cone, K1<0, K2>-K1/2) not covered by magmo:UniaxialMagneticAnisotropy (axial minimum) or magmo:CubicMagnetocrystallineAnisotropy; it requires a new subclass under magmo:UniaxialMagneticAnisotropy to maintain rigid subsumption."@en ;
+                    rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                    rdfs:label "easy-cone anisotropy" ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "easy-cone anisotropy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Effectiveanisotropy
+:Effectiveanisotropy rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Mesoscopicscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#EquiaxedGrains
+:EquiaxedGrains rdf:type owl:Class ;
+                rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#Grain> ;
+                rdfs:comment "Equiaxed grains are a rigid, sortal morphological subtype of magmo:Grain (equal dimensions in all directions) not distinguished by any existing magmo: annotation; they require a new subclass under magmo:Grain to capture their microstructural role in SmCo-based PM alloys."@en ;
+                rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                rdfs:label "equiaxed grains" ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "equiaxed grains"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ExchangeCorrelationFunctional
+:ExchangeCorrelationFunctional rdf:type owl:Class ;
+                               rdfs:comment "The exchange-correlation functional approximation used in DFT. The choice (PBE vs LDA vs GGA+U) directly affects computed magnetic moments and anisotropy."@en ;
+                               rdfs:label "ExchangeCorrelationFunctional" ;
+                               <http://www.w3.org/2004/02/skos/core#prefLabel> "ExchangeCorrelationFunctional"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ExchangeEnergyDensity
+:ExchangeEnergyDensity rdf:type owl:Class ;
+                       rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy> ;
+                       rdfs:comment "Exchange energy density (∝A|∇m|²) is a distinct micromagnetic energy density term not covered by any existing magmo: class; magmo:MagnetocrystallineAnisotropyEnergy is the closest structural parent as a volumetric magnetic energy density, warranting a new sibling subclass in M3_Material."@en ;
+                       rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                       rdfs:label "exchange energy density" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "exchange energy density"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ExchangeSpringMagnet
+:ExchangeSpringMagnet rdf:type owl:Class ;
+                      rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#BulkMagnet> ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasPart ;
+                                        owl:someValuesFrom :HardMagnet
+                                      ] ,
+                                      [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasPart ;
+                                        owl:someValuesFrom :SoftMagnet
+                                      ] ;
+                      rdfs:comment "An exchange-spring magnet is a nanocomposite permanent magnet type combining hard and soft phases via exchange coupling; it is a distinct pm-multiscale-relevant material class not captured by pm:PermanentMagnetMaterial or any existing magmo: subclass, and should be a new subclass of magmo:BulkMagnet."@en ;
+                      rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                      rdfs:label "exchange-spring magnet" ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "exchange-spring magnet"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Exchangecouplednanocompositepermanentmagnet
+:Exchangecouplednanocompositepermanentmagnet rdf:type owl:Class ;
+                                             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                               owl:onProperty :hasScaleLevel ;
+                                                               owl:hasValue :Mesoscopicscale
+                                                             ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Exchangespringmagnet
+:Exchangespringmagnet rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasScaleLevel ;
+                                        owl:hasValue :Mesoscopicscale
+                                      ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Exchangespringpermanentmagnet
+:Exchangespringpermanentmagnet rdf:type owl:Class ;
+                               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                 owl:onProperty :hasScaleLevel ;
+                                                 owl:hasValue :Mesoscopicscale
+                                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ExperimentalDetermination
+:ExperimentalDetermination rdf:type owl:Class ;
+                           rdfs:subClassOf :PropertyDetermination ;
+                           rdfs:comment "A property value obtained through experimental measurement: VSM, SQUID magnetometry, PPMS, or neutron diffraction."@en ;
+                           rdfs:label "ExperimentalDetermination" ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "ExperimentalDetermination"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ExperimentalValidation
+:ExperimentalValidation rdf:type owl:Class ;
+                        rdfs:comment "A record that a computed property value has been compared against an experimental measurement, including the agreement/discrepancy."@en ;
+                        rdfs:label "ExperimentalValidation" ;
+                        <http://www.w3.org/2004/02/skos/core#altLabel> "lorentz tem"@en ,
+                                                                       "vibrating-sample magnetometer"@en ;
+                        <http://www.w3.org/2004/02/skos/core#prefLabel> "ExperimentalValidation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Fermidiracsmearing
+:Fermidiracsmearing rdf:type owl:Class ;
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasScaleLevel ;
+                                      owl:hasValue :Electronicscale
+                                    ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Ferrimagnet
+:Ferrimagnet rdf:type owl:Class ;
+             rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystallineMagneticMaterial> ;
+             rdfs:comment "A ferrimagnet (net spontaneous magnetisation from unequal antiparallel sublattices, e.g. Gd2Fe14B) is a rigid, sortal material class; pm:Ferrite is too narrow (oxide ferrites only), so a new subclass under magmo:CrystallineMagneticMaterial is required for the general ferrimagnetic material type."@en ;
+             rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+             rdfs:label "ferrimagnet" ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "ferrimagnet"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#FigureSource
+:FigureSource rdf:type owl:Class ;
+              rdfs:subClassOf :PropertySource ;
+              rdfs:comment "A property value extracted or digitized from a figure in a publication."@en ;
+              rdfs:label "FigureSource" ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "FigureSource"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Fixedspinmomentcalculation
+:Fixedspinmomentcalculation rdf:type owl:Class ;
+                            rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                              owl:onProperty :hasScaleLevel ;
+                                              owl:hasValue :Electronicscale
+                                            ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Fixedspinmomentmethod
+:Fixedspinmomentmethod rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Electronicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Flapwmethod
+:Flapwmethod rdf:type owl:Class ;
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasScaleLevel ;
+                               owl:hasValue :Electronicscale
+                             ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Frozenmagnoncalculation
+:Frozenmagnoncalculation rdf:type owl:Class ;
+                         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasScaleLevel ;
+                                           owl:hasValue :Atomisticscale
+                                         ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Fullpotentiallmtomethod
+:Fullpotentiallmtomethod rdf:type owl:Class ;
+                         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasScaleLevel ;
+                                           owl:hasValue :Electronicscale
+                                         ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Giantmagneticmoment
+:Giantmagneticmoment rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Electronicscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#GilbertDampingConstant
+:GilbertDampingConstant rdf:type owl:Class ;
+                        rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant> ;
+                        rdfs:comment "The Gilbert damping constant α is a dimensionless material parameter governing LLG spin dynamics, analogous in role to magmo:ExchangeStiffnessConstant as a micromagnetic material parameter; no existing class covers it, so a new sibling subclass is needed."@en ;
+                        rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                        rdfs:label "gilbert damping constant" ;
+                        <http://www.w3.org/2004/02/skos/core#prefLabel> "gilbert damping constant"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#GilbertEquationOfMotion
+:GilbertEquationOfMotion rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/emmo#MaterialsModel> ;
+                         rdfs:comment "The Gilbert equation of motion is the dynamic equation for magnetization precession and damping, foundational to both micromagnetic and atomistic spin-dynamics simulations; it is a MaterialsModel governing magnetization dynamics, and while pm:SpinDynamicsConfiguration captures its parameters, no class represents the equation itself."@en ;
+                         rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                         rdfs:label "gilbert equation of motion" ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "gilbert equation of motion"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HardAxis
+:HardAxis rdf:type owl:Class ;
+          rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystallographicOrientation> ;
+          rdfs:comment "Hard axis is a crystallographic direction concept directly relevant to magnetocrystalline anisotropy in permanent magnets; no existing magmo: class captures the hard-axis direction specifically, so a new subclass under magmo:CrystallographicOrientation is warranted."@en ;
+          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+          rdfs:label "hard axis" ;
+          <http://www.w3.org/2004/02/skos/core#prefLabel> "hard axis"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HardGrain
+:HardGrain rdf:type owl:Class ;
+           rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#Grain> ;
+           rdfs:comment "A hard grain is a rigid, sortal subtype of magmo:Grain distinguished by its switching-field criterion and bistable magnetisation states, a distinction not captured by any existing magmo: class annotation, making it a GAP requiring a new subclass under magmo:Grain."@en ;
+           rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+           rdfs:label "hard grain" ;
+           <http://www.w3.org/2004/02/skos/core#prefLabel> "hard grain"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HardMagnet
+:HardMagnet rdf:type owl:Class ;
+            rdfs:subClassOf :PermanentMagnetMaterial ;
+            owl:disjointWith :SoftMagnet ;
+            rdfs:comment "A permanent magnet with high coercivity (typically Hc > 400 kA/m), suitable for applications requiring stable magnetic fields: motors, generators, sensors."@en ;
+            rdfs:label "HardMagnet" ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "HardMagnet"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Hardaxis
+:Hardaxis rdf:type owl:Class ;
+          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasProperty ;
+                            owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropy>
+                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HeisenbergExchangeParameter
+:HeisenbergExchangeParameter rdf:type owl:Class ;
+                             rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant> ;
+                             rdfs:comment "The Heisenberg exchange parameter J_ij is a pairwise site-resolved quantity distinct from the continuum magmo:ExchangeStiffnessConstant; it is an atomistic-scale input to Monte Carlo / spin-dynamics simulations and requires a new subclass under magmo:ExchangeStiffnessConstant in M3_Material."@en ;
+                             rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                             rdfs:label "heisenberg exchange parameter" ;
+                             <http://www.w3.org/2004/02/skos/core#note> "What is the Heisenberg exchange parameter used for? — used as input to Monte Carlo simulations for Curie temperature determination"@en ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel> "heisenberg exchange parameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HeisenbergModelHamiltonian
+:HeisenbergModelHamiltonian rdf:type owl:Class ;
+                            rdfs:subClassOf <https://w3id.org/emmo#AtomisticModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Heisenbergmodelhamiltonian
+:Heisenbergmodelhamiltonian rdf:type owl:Class ;
+                            rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                              owl:onProperty :hasScaleLevel ;
+                                              owl:hasValue :Atomisticscale
+                                            ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Heisenbergspinhamiltonian
+:Heisenbergspinhamiltonian rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Atomisticscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Heisenbergspinmodel
+:Heisenbergspinmodel rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Atomisticscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HeuslerAlloy
+:HeuslerAlloy rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystallineMagneticMaterial> ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasProperty ;
+                                owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization>
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasProperty ;
+                                owl:someValuesFrom :CurieTemperature
+                              ] ;
+              rdfs:comment "Heusler alloys (X2YZ intermetallics) are a distinct class of crystalline magnetic materials investigated for rare-earth-free permanent magnet applications; they are not captured by pm:AlNiCo or any existing pm:/magmo: material class, requiring a new subclass of magmo:CrystallineMagneticMaterial."@en ;
+              rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+              rdfs:label "heusler alloy" ;
+              <http://www.w3.org/2004/02/skos/core#note> "What is a Heusler alloy used for? — studied here as all-3d transition metal variants for permanent magnet applications"@en ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "heusler alloy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HubbardIApproximation
+:HubbardIApproximation rdf:type owl:Class ;
+                       rdfs:subClassOf <https://w3id.org/emmo#ElectronicModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Hubbardiapproximation
+:Hubbardiapproximation rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Electronicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Hubbardupotential
+:Hubbardupotential rdf:type owl:Class ;
+                   rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                     owl:onProperty :hasScaleLevel ;
+                                     owl:hasValue :Electronicscale
+                                   ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Interatomicexchangeparameter
+:Interatomicexchangeparameter rdf:type owl:Class ;
+                              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasScaleLevel ;
+                                                owl:hasValue :Electronicscale
+                                              ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Intersiteexchangecouplingparameter
+:Intersiteexchangecouplingparameter rdf:type owl:Class ;
+                                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                      owl:onProperty :hasScaleLevel ;
+                                                      owl:hasValue :Atomisticscale
+                                                    ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#KPointSampling
+:KPointSampling rdf:type owl:Class ;
+                rdfs:comment "The Brillouin zone sampling scheme (e.g., Monkhorst-Pack grid). Denser grids give more accurate results but cost more compute time."@en ;
+                rdfs:label "KPointSampling" ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "KPointSampling"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Kkrgreensfunctionmethod
+:Kkrgreensfunctionmethod rdf:type owl:Class ;
+                         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasScaleLevel ;
+                                           owl:hasValue :Electronicscale
+                                         ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Kpointresolvedmae
+:Kpointresolvedmae rdf:type owl:Class ;
+                   rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                     owl:onProperty :hasScaleLevel ;
+                                     owl:hasValue :Electronicscale
+                                   ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#KronmüllerEquation
+:KronmüllerEquation rdf:type owl:Class ;
+                    rdfs:subClassOf <https://w3id.org/emmo#MaterialLaw> ;
+                    rdfs:comment "The Kronmüller equation is a semiempirical constitutive expression for coercivity incorporating microstructural factors (α, Deff) to relate intrinsic magnetic properties to macroscopic coercive field; it is an emmo:MaterialLaw linking material parameters to a key permanent magnet performance quantity, and no existing pm: or magmo: class captures this coercivity-microstructure relation."@en ;
+                    rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                    rdfs:label "kronmüller equation" ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "kronmüller equation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#L10mnga
+:L10mnga rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasProperty ;
+                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#UniaxialMagnetocrystallineAnisotropy>
+                         ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Ldaplusdmft
+:Ldaplusdmft rdf:type owl:Class ;
+             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                               owl:onProperty :hasScaleLevel ;
+                               owl:hasValue :Electronicscale
+                             ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Ltpmnbi
+:Ltpmnbi rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :hasProperty ;
+                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#UniaxialMagnetocrystallineAnisotropy>
+                         ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticAnisotropyConstantK3
+:MagneticAnisotropyConstantK3 rdf:type owl:Class ;
+                              rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK2> ;
+                              rdfs:comment "K3 is the third-order magnetocrystalline anisotropy constant, a direct higher-order sibling of magmo:MagnetocrystallineAnisotropyConstantK2 and magmo:MagnetocrystallineAnisotropyConstantK1; the ontology has K1 and K2 but lacks K3, making this a genuine gap requiring a new subclass under the same parent."@en ;
+                              rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                              rdfs:label "magnetic anisotropy constant k3" ;
+                              <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetic anisotropy constant k3"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticAnisotropyConstantK4
+:MagneticAnisotropyConstantK4 rdf:type owl:Class ;
+                              rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#UniaxialAnisotropyConstant> ;
+                              rdfs:comment "Magnetic anisotropy constant K4 is the fourth-order uniaxial magnetocrystalline anisotropy constant; while magmo:MagnetocrystallineAnisotropyConstantK2 is the closest existing class (second-order), K4 is a distinct higher-order term not currently represented, requiring a new subclass MagnetocrystallineAnisotropyConstantK4 under magmo:UniaxialAnisotropyConstant."@en ;
+                              rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                              rdfs:label "magnetic anisotropy constant k4" ;
+                              <http://www.w3.org/2004/02/skos/core#note> "How is the magnetic anisotropy constant K4 computed? — extracted by fitting the torque curve from constrained Monte Carlo simulations"@en ;
+                              <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetic anisotropy constant k4"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticExchangeCouplingConstant
+:MagneticExchangeCouplingConstant rdf:type owl:Class ;
+                                  rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant> ;
+                                  rdfs:comment "The magnetic exchange coupling constant J (pairwise R-Fe, Fe-Fe) is a distinct atomistic quantity from magmo:ExchangeStiffnessConstant (a micromagnetic continuum parameter); no existing magmo: class captures the pairwise Heisenberg exchange parameter, so a new subclass is required under the exchange interaction branch."@en ;
+                                  rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                                  rdfs:label "magnetic exchange coupling constant" ;
+                                  <http://www.w3.org/2004/02/skos/core#note> "How is the magnetic exchange coupling constant calculated? — calculated using the Liechtenstein formula"@en ;
+                                  <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetic exchange coupling constant"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticForceTheorem
+:MagneticForceTheorem rdf:type owl:Class ;
+                      rdfs:subClassOf <https://w3id.org/emmo#ElectronicModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticHardnessParameter
+:MagneticHardnessParameter rdf:type owl:Class ;
+                           rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#ExtrinsicMagneticProperties> ;
+                           rdfs:comment "The magnetic hardness parameter κ = √(K1/μ0Ms²) is a dimensionless figure of merit for hard magnets not represented in magmo:ExtrinsicMagneticProperties or any existing class; a new subclass is needed per the gap criterion."@en ;
+                           rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                           rdfs:label "magnetic hardness parameter" ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetic hardness parameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticReluctivity
+:MagneticReluctivity rdf:type owl:Class ;
+                     rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#AbsolutePermeability> ;
+                     rdfs:comment "Magnetic reluctivity (ν = 1/μ, units m/H) is the reciprocal of permeability and a distinct quantity used in FEM motor optimization; it is not covered by magmo:AbsolutePermeability but is its logical inverse, requiring a new sibling class under the EMMO Quantity branch for magnetic field-response properties."@en ;
+                     rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                     rdfs:label "magnetic reluctivity" ;
+                     <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetic reluctivity"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Magneticexchangeconstant
+:Magneticexchangeconstant rdf:type owl:Class ;
+                          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                            owl:onProperty :hasScaleLevel ;
+                                            owl:hasValue :Atomisticscale
+                                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Magneticforcetheorem
+:Magneticforcetheorem rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasScaleLevel ;
+                                        owl:hasValue :Electronicscale
+                                      ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Magneticphase
+:Magneticphase rdf:type owl:Class ;
+               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasProperty ;
+                                 owl:someValuesFrom :TheoreticalEnergyProductLimit
+                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Magneticsurfaceanisotropy
+:Magneticsurfaceanisotropy rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Mesoscopicscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagnetizationReversal
+:MagnetizationReversal rdf:type owl:Class ;
+                       rdfs:subClassOf :MicromagneticsStep .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Magnetizationreversal
+:Magnetizationreversal rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Mesoscopicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagnetocrystallineAnisotropyConstantK3
+:MagnetocrystallineAnisotropyConstantK3 rdf:type owl:Class ;
+                                        rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK2> ;
+                                        rdfs:comment "K3 is the third-order uniaxial magnetocrystalline anisotropy constant of Nd2Fe14B, a direct higher-order sibling of the existing magmo:MagnetocrystallineAnisotropyConstantK2; no existing magmo: class covers K3, requiring a new class as a sibling under the same parent in the EMMO Quantity branch."@en ;
+                                        rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                                        rdfs:label "magnetocrystalline anisotropy constant k3" ;
+                                        <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetocrystalline anisotropy constant k3"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagnetoelasticAnisotropy
+:MagnetoelasticAnisotropy rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagneticAnisotropy> ;
+                          rdfs:comment "Magnetoelastic anisotropy is a distinct physical mechanism (stress-magnetostriction coupling) not captured by any existing magmo: anisotropy subclass; it requires a new subclass under magmo:MagneticAnisotropy to preserve ontological rigidity of the mechanism."@en ;
+                          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                          rdfs:label "magnetoelastic anisotropy" ;
+                          <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetoelastic anisotropy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Magnetostriction
+:Magnetostriction rdf:type owl:Class ;
+                  rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#InducedMagneticAnisotropy> ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasProperty ;
+                                    owl:someValuesFrom :MagnetostrictionConstant
+                                  ] ;
+                  rdfs:comment "Magnetostriction (magnetoelastic coupling coefficient λ) is a distinct intrinsic magnetic quantity not represented by any existing magmo: class; a new subclass under magmo:InducedMagneticAnisotropy (the closest magnetoelastic parent) is required per the gap criterion."@en ;
+                  rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                  rdfs:label "magnetostriction" ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetostriction"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagnetostrictionConstant
+:MagnetostrictionConstant rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK1> ;
+                          rdfs:comment "λs is a dimensionless intrinsic material constant quantifying magneto-elastic coupling; no existing magmo: class covers magnetostriction constants, making it a genuine ontology gap requiring a new sibling class alongside magmo:MagnetocrystallineAnisotropyConstantK1 under the intrinsic-property branch."@en ;
+                          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                          rdfs:label "magnetostriction constant" ;
+                          <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetostriction constant"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MeshSpecification
+:MeshSpecification rdf:type owl:Class ;
+                   rdfs:comment "The spatial discretization for finite element micromagnetics: cell size, element type, and refinement strategy. Cell size must be smaller than the exchange length."@en ;
+                   rdfs:label "MeshSpecification" ;
+                   <http://www.w3.org/2004/02/skos/core#prefLabel> "MeshSpecification"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MicromagneticsConfiguration
+:MicromagneticsConfiguration rdf:type owl:Class ;
+                             rdfs:subClassOf :SimulationConfiguration ,
+                                             [ rdf:type owl:Restriction ;
+                                               owl:onProperty :hasMesh ;
+                                               owl:cardinality "1"^^xsd:nonNegativeInteger
+                                             ] ;
+                             rdfs:comment "Configuration for continuum micromagnetics: finite element mesh, cell size, boundary conditions, solver algorithm, and external field sweep parameters."@en ;
+                             rdfs:label "MicromagneticsConfiguration" ;
+                             <http://www.w3.org/2004/02/skos/core#altLabel> "micromagnetic theory"@en ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel> "MicromagneticsConfiguration"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MicromagneticsStep
+:MicromagneticsStep rdf:type owl:Class ;
+                    rdfs:subClassOf :SimulationStep ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasOutputParameter ;
+                                      owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#CoercivityHc>
+                                    ] ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasOutputParameter ;
+                                      owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MaximumEnergyProduct>
+                                    ] ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasOutputParameter ;
+                                      owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#Remanence>
+                                    ] ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasConfiguration ;
+                                      owl:allValuesFrom :MicromagneticsConfiguration
+                                    ] ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :hasScaleLevel ;
+                                      owl:hasValue :MesoscopicScale
+                                    ] ;
+                    rdfs:comment "A continuum micromagnetic simulation (e.g., esys-escript, mumax3) that computes extrinsic properties: coercivity Hc, remanence Mr, maximum energy product BHmax, and domain structure."@en ;
+                    rdfs:label "MicromagneticsStep" ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "MicromagneticsStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Micromagnetictheory
+:Micromagnetictheory rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Mesoscopicscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MissingParameter
+:MissingParameter rdf:type owl:Class ;
+                  rdfs:comment "A simulation input parameter required for reproduction but not explicitly stated in the paper. Common examples: exchange stiffness A, damping parameter, mesh details."@en ;
+                  rdfs:label "MissingParameter" ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "MissingParameter"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Mnaltauphase
+:Mnaltauphase rdf:type owl:Class ;
+              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasProperty ;
+                                owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization>
+                              ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Modifiedmagnetocrystallineanisotropyconstant
+:Modifiedmagnetocrystallineanisotropyconstant rdf:type owl:Class ;
+                                              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                                owl:onProperty :hasScaleLevel ;
+                                                                owl:hasValue :Mesoscopicscale
+                                                              ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Montecarloalgorithm
+:Montecarloalgorithm rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Atomisticscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Montecarlostep
+:Montecarlostep rdf:type owl:Class ;
+                rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                  owl:onProperty :hasScaleLevel ;
+                                  owl:hasValue :Atomisticscale
+                                ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Muffintinapproximation
+:Muffintinapproximation rdf:type owl:Class ;
+                        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                          owl:onProperty :hasScaleLevel ;
+                                          owl:hasValue :Electronicscale
+                                        ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MultiScaleSimulationWorkflow
+:MultiScaleSimulationWorkflow rdf:type owl:Class ;
+                              rdfs:subClassOf <https://w3id.org/emmo#EMMO_64963ed6_39c9_4258_85e0_6466c4b5420c> ,
+                                              <https://w3id.org/emmo#EMMO_7d56ec24_499d_487a_af7d_a91aaa787bfe> ,
+                                              [ rdf:type owl:Restriction ;
+                                                owl:onProperty :hasSimulationStep ;
+                                                owl:minCardinality "2"^^xsd:nonNegativeInteger
+                                              ] ;
+                              rdfs:comment "A computational workflow that chains simulation steps across different spatial/temporal scales (e.g., DFT -> spin dynamics -> micromagnetics). Each step produces parameters consumed by the next."@en ;
+                              rdfs:label "MultiScaleSimulationWorkflow" ;
+                              <http://www.w3.org/2004/02/skos/core#prefLabel> "MultiScaleSimulationWorkflow"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Nanocomposite
+:Nanocomposite rdf:type owl:Class ;
+               rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystallineMagneticMaterial> ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasScaleLevel ;
+                                 owl:hasValue :Mesoscopicscale
+                               ] ;
+               rdfs:comment "A nanocomposite hard/soft two-phase magnet is a rigid, sortal material class central to PM multi-scale simulation; it is not expressible as any single existing magmo: class (it combines hard and soft phases at nanoscale), so a new subclass under magmo:CrystallineMagneticMaterial is required."@en ;
+               rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+               rdfs:label "nanocomposite" ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "nanocomposite"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Nanocrystallinemicrostructure
+:Nanocrystallinemicrostructure rdf:type owl:Class ;
+                               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                 owl:onProperty :hasScaleLevel ;
+                                                 owl:hasValue :Mesoscopicscale
+                                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Nd2fe14b
+:Nd2fe14b rdf:type owl:Class ;
+          rdfs:subClassOf <http://org.semanticweb.owlapi/error#Error2> ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasProperty ;
+                            owl:someValuesFrom :MagnetocrystallineAnisotropyConstantK3
+                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#NdFeB
+:NdFeB rdf:type owl:Class ;
+       rdfs:subClassOf :HardMagnet ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasPart ;
+                         owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#GrainBoundaryPhase>
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :hasProperty ;
+                         owl:someValuesFrom :CurieTemperature
+                       ] ;
+       rdfs:comment "Neodymium-iron-boron (Nd2Fe14B) and its variants (with Dy, Tb substitution). Highest room-temperature BHmax (~400 kJ/m3) among all permanent magnets."@en ;
+       rdfs:label "NdFeB" ;
+       <http://www.w3.org/2004/02/skos/core#prefLabel> "NdFeB"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#NoncollinearCalculation
+:NoncollinearCalculation rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/emmo#Computation> ;
+                         rdfs:comment "Noncollinear calculation is a DFT computational configuration that allows arbitrary spin orientations, required for accurate magnetocrystalline anisotropy computation in permanent magnets; it is a sub-method of pm:DFTStep not currently represented as a distinct class, warranting a new subclass under emmo:Computation."@en ;
+                         rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                         rdfs:label "noncollinear calculation" ;
+                         <http://www.w3.org/2004/02/skos/core#note> "What is a noncollinear calculation used for? — required for accurate computation of magnetic anisotropy energy"@en ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "noncollinear calculation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Noncollinearmagneticcalculation
+:Noncollinearmagneticcalculation rdf:type owl:Class ;
+                                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                   owl:onProperty :hasScaleLevel ;
+                                                   owl:hasValue :Electronicscale
+                                                 ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Noncollinearspincalculation
+:Noncollinearspincalculation rdf:type owl:Class ;
+                             rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                               owl:onProperty :hasScaleLevel ;
+                                               owl:hasValue :Electronicscale
+                                             ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Onetofivephase
+:Onetofivephase rdf:type owl:Class ;
+                rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                  owl:onProperty :hasProperty ;
+                                  owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropy>
+                                ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Orbitalmagnetization
+:Orbitalmagnetization rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasScaleLevel ;
+                                        owl:hasValue :Electronicscale
+                                      ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Organicsemiconductorlayer
+:Organicsemiconductorlayer rdf:type owl:Class ;
+                           rdfs:subClassOf <http://org.semanticweb.owlapi/error#Error3> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ParameterHandoff
+:ParameterHandoff rdf:type owl:Class ;
+                  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                    owl:onProperty :transfersParameter ;
+                                    owl:minCardinality "1"^^xsd:nonNegativeInteger
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :fromStep ;
+                                    owl:cardinality "1"^^xsd:nonNegativeInteger
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :toStep ;
+                                    owl:cardinality "1"^^xsd:nonNegativeInteger
+                                  ] ;
+                  rdfs:comment "The transfer of computed parameter values from an upstream simulation step to a downstream step. Example: DFT-computed exchange integrals (Jij) passed to spin dynamics as Heisenberg Hamiltonian input."@en ;
+                  rdfs:label "ParameterHandoff" ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "ParameterHandoff"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PermanentMagnetMaterial
+:PermanentMagnetMaterial rdf:type owl:Class ;
+                         rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#AnisotropyField>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#CoercivityHc>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#ExchangeStiffnessConstant>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK1>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MaximumEnergyProduct>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#Remanence>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization>
+                                         ] ,
+                                         [ rdf:type owl:Restriction ;
+                                           owl:onProperty :hasProperty ;
+                                           owl:someValuesFrom :CurieTemperature
+                                         ] ;
+                         owl:disjointWith :SoftMagnet ;
+                         rdfs:comment "A magnetic material that retains magnetization after removal of an external field, characterized by high coercivity and remanence. Subclass of MagMO MagneticMaterial."@en ;
+                         rdfs:label "PermanentMagnetMaterial" ;
+                         <http://www.w3.org/2004/02/skos/core#altLabel> "exchange-coupled nanocomposite permanent magnet"@en ,
+                                                                        "exchange-spring permanent magnet"@en ,
+                                                                        "spring exchange magnet"@en ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "PermanentMagnetMaterial"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Phase217
+:Phase217 rdf:type owl:Class ;
+          rdfs:subClassOf [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasProperty ;
+                            owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropy>
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :hasProperty ;
+                            owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#SaturationMagnetization>
+                          ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PreisachModel
+:PreisachModel rdf:type owl:Class ;
+               rdfs:subClassOf <https://w3id.org/emmo#MaterialsModel> ;
+               rdfs:comment "The Preisach model is a classical phenomenological hysteresis model based on bistable magnetic units with a distribution function, used to describe macroscopic hysteresis loops in permanent magnets; it is an emmo:MaterialsModel at the continuum/phenomenological level, and no existing pm: class represents hysteresis distribution models."@en ;
+               rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+               rdfs:label "preisach model" ;
+               <http://www.w3.org/2004/02/skos/core#note> "What is the Preisach model used for? — A classical model of hysteresis based on bistable magnetic units with a fixed distribution function"@en ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "preisach model"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PropertyDetermination
+:PropertyDetermination rdf:type owl:Class ;
+                       owl:equivalentClass [ rdf:type owl:Class ;
+                                             owl:unionOf ( :ComputationalDetermination
+                                                           :ExperimentalDetermination
+                                                         )
+                                           ] ;
+                       rdfs:comment "How a property value was obtained: computationally (DFT, micromagnetics, ML) or experimentally (VSM, SQUID, PPMS)."@en ;
+                       rdfs:label "PropertyDetermination" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "PropertyDetermination"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PropertyPrediction
+:PropertyPrediction rdf:type owl:Class ;
+                    rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                      owl:onProperty :fromInputProperty ;
+                                      owl:minCardinality "1"^^xsd:nonNegativeInteger
+                                    ] ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty :predictsProperty ;
+                                      owl:minCardinality "1"^^xsd:nonNegativeInteger
+                                    ] ;
+                    rdfs:comment "A machine-learning prediction of extrinsic magnetic properties (Hc, Mr, BHmax) from intrinsic parameters (Ms, A, K1). Example: mammos-ai Random Forest models."@en ;
+                    rdfs:label "PropertyPrediction" ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "PropertyPrediction"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PropertySource
+:PropertySource rdf:type owl:Class ;
+                owl:equivalentClass [ rdf:type owl:Class ;
+                                      owl:unionOf ( :FigureSource
+                                                    :TableSource
+                                                    :TextSource
+                                                  )
+                                    ] ;
+                rdfs:comment "Where in a publication a property value is found: running text, a table cell, or extracted from a figure."@en ;
+                rdfs:label "PropertySource" ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "PropertySource"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PropertySynonym
+:PropertySynonym rdf:type owl:Class ;
+                 rdfs:comment "An alternative name or symbol for a magnetic property used in the literature. Example: coercivity appears as Hc, Hci, iHc, jHc, or BHc."@en ;
+                 rdfs:label "PropertySynonym" ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "PropertySynonym"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#RandomAnisotropyModel
+:RandomAnisotropyModel rdf:type owl:Class ;
+                       rdfs:subClassOf <https://w3id.org/emmo#ContinuumModel> ;
+                       rdfs:comment "The random anisotropy model is a continuum-level theoretical framework describing how spatially disordered anisotropy axes are averaged by exchange interactions in nanocrystalline magnets; it fits emmo:ContinuumModel because it operates at the mesoscale/continuum level, and no existing pm: class captures this microstructural averaging model."@en ;
+                       rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                       rdfs:label "random anisotropy model" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "random anisotropy model"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Randomanisotropymodel
+:Randomanisotropymodel rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :hasScaleLevel ;
+                                         owl:hasValue :Mesoscopicscale
+                                       ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Rareearthsite
+:Rareearthsite rdf:type owl:Class ;
+               rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                 owl:onProperty :hasProperty ;
+                                 owl:someValuesFrom :SingleIonAnisotropyEnergy
+                               ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#RemanenceEnhancement
+:RemanenceEnhancement rdf:type owl:Class ;
+                      rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#Remanence> ;
+                      rdfs:comment "Remanence enhancement is a distinct phenomenon (exchange-coupling-driven increase above Stoner-Wohlfarth limit) not captured by magmo:Remanence alone; a new subclass under magmo:Remanence is needed per the ontological gap criterion."@en ;
+                      rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                      rdfs:label "remanence enhancement" ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "remanence enhancement"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ReportedPropertyValue
+:ReportedPropertyValue rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :forMaterial ;
+                                         owl:cardinality "1"^^xsd:nonNegativeInteger
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :forProperty ;
+                                         owl:cardinality "1"^^xsd:nonNegativeInteger
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :reportedInPublication ;
+                                         owl:cardinality "1"^^xsd:nonNegativeInteger
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty :numericValue ;
+                                         owl:cardinality "1"^^xsd:nonNegativeInteger
+                                       ] ;
+                       rdfs:comment "A specific magnetic property value as reported in a paper, with its context: material, method, temperature, unit, and location in the paper."@en ;
+                       rdfs:label "ReportedPropertyValue" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "ReportedPropertyValue"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ReproducibilityAssessment
+:ReproducibilityAssessment rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :reproducibilityScore ;
+                                             owl:cardinality "1"^^xsd:nonNegativeInteger
+                                           ] ;
+                           rdfs:comment "An evaluation of whether a paper reports sufficient parameters to reproduce its computational results. Score 0-1 based on completeness of inputs."@en ;
+                           rdfs:label "ReproducibilityAssessment" ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "ReproducibilityAssessment"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ResearchGroup
+:ResearchGroup rdf:type owl:Class ;
+               rdfs:comment "The research group or institution that performed the study. Enables tracking which groups produce comparable results."@en ;
+               rdfs:label "ResearchGroup" ;
+               <http://www.w3.org/2004/02/skos/core#prefLabel> "ResearchGroup"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ScaleBridgingAssumption
+:ScaleBridgingAssumption rdf:type owl:Class ;
+                         rdfs:comment "A physical assumption that justifies mapping parameters between scales. Example: mean-field approximation connecting DFT exchange integrals to the atomistic Heisenberg Hamiltonian."@en ;
+                         rdfs:label "ScaleBridgingAssumption" ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "ScaleBridgingAssumption"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ScaleLevel
+:ScaleLevel rdf:type owl:Class ;
+            rdfs:comment "The characteristic spatial and temporal scale at which a simulation operates: electronic (angstrom/femtosecond), atomistic (nanometer/picosecond), or mesoscopic (micrometer/nanosecond)."@en ;
+            rdfs:label "ScaleLevel" ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "ScaleLevel"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ScientificPublication
+:ScientificPublication rdf:type owl:Class ;
+                       rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                         owl:onProperty :doi ;
+                                         owl:cardinality "1"^^xsd:nonNegativeInteger
+                                       ] ;
+                       rdfs:comment "A published paper reporting computational or experimental results on magnetic materials. Identified by DOI."@en ;
+                       rdfs:label "ScientificPublication" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "ScientificPublication"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Secondvariationalapproach
+:Secondvariationalapproach rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Electronicscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Selfconsistentfieldcalculation
+:Selfconsistentfieldcalculation rdf:type owl:Class ;
+                                rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                  owl:onProperty :hasScaleLevel ;
+                                                  owl:hasValue :Electronicscale
+                                                ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SimulationApproximation
+:SimulationApproximation rdf:type owl:Class ;
+                         rdfs:comment "A simplification used in a paper's calculation: coherent rotation, single-domain approximation, neglect of thermal fluctuations, collinear spin assumption."@en ;
+                         rdfs:label "SimulationApproximation" ;
+                         <http://www.w3.org/2004/02/skos/core#altLabel> "coherent-potential approximation"@en ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "SimulationApproximation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SimulationConfiguration
+:SimulationConfiguration rdf:type owl:Class ;
+                         rdfs:comment "The complete set of computational settings for a simulation step: software version, numerical parameters, boundary conditions, and convergence criteria."@en ;
+                         rdfs:label "SimulationConfiguration" ;
+                         <http://www.w3.org/2004/02/skos/core#prefLabel> "SimulationConfiguration"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SimulationStep
+:SimulationStep rdf:type owl:Class ;
+                rdfs:subClassOf <https://w3id.org/emmo#EMMO_4299e344_a321_4ef2_a744_bacfcce80afc> ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :hasScaleLevel ;
+                                  owl:cardinality "1"^^xsd:nonNegativeInteger
+                                ] ;
+                rdfs:comment "A single computational step in a multi-scale workflow, operating at a specific scale. Examples: a VASP DFT run, an UppASD temperature sweep, an esys-escript hysteresis loop calculation."@en ;
+                rdfs:label "SimulationStep" ;
+                <http://www.w3.org/2004/02/skos/core#altLabel> "monte carlo step"@en ,
+                                                               "monte carlo steps"@en ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "SimulationStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SingleIonAnisotropyEnergy
+:SingleIonAnisotropyEnergy rdf:type owl:Class ;
+                           rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy> ;
+                           rdfs:comment "Single-ion anisotropy energy is the site-resolved classical anisotropy energy at a rare-earth site computed from crystal-field and Stevens coefficients; it is a precursor to the macroscopic magmo:MagnetocrystallineAnisotropyEnergy but operates at the single-ion scale not currently represented, requiring a new subclass."@en ;
+                           rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                           rdfs:label "single-ion anisotropy energy" ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "single-ion anisotropy energy"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Singleionanisotropyenergy
+:Singleionanisotropyenergy rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Atomisticscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SoftMagnet
+:SoftMagnet rdf:type owl:Class ;
+            rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagneticMaterial> ;
+            rdfs:comment "A magnetic material with low coercivity, easily magnetized and demagnetized. Used in transformers, inductors, and electromagnetic shielding. Disjoint with HardMagnet."@en ;
+            rdfs:label "SoftMagnet" ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "SoftMagnet"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SolverAlgorithm
+:SolverAlgorithm rdf:type owl:Class ;
+                 rdfs:comment "The numerical algorithm used to solve governing equations: conjugate gradient, Runge-Kutta, implicit Euler, etc."@en ;
+                 rdfs:label "SolverAlgorithm" ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "SolverAlgorithm"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SpinDynamicsConfiguration
+:SpinDynamicsConfiguration rdf:type owl:Class ;
+                           rdfs:subClassOf :SimulationConfiguration ;
+                           rdfs:comment "Configuration for atomistic spin dynamics: simulation temperature range, Gilbert damping parameter, time step, and number of Monte Carlo / Langevin dynamics steps."@en ;
+                           rdfs:label "SpinDynamicsConfiguration" ;
+                           <http://www.w3.org/2004/02/skos/core#altLabel> "damping parameter"@en ,
+                                                                          "gilbert damping"@en ,
+                                                                          "heisenberg spin hamiltonian"@en ,
+                                                                          "heisenberg spin model"@en ,
+                                                                          "spin hamiltonian"@en ,
+                                                                          "spin heisenberg hamiltonian"@en ,
+                                                                          "stochastic landau-lifshitz equation"@en ;
+                           <http://www.w3.org/2004/02/skos/core#prefLabel> "SpinDynamicsConfiguration"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#SpinDynamicsStep
+:SpinDynamicsStep rdf:type owl:Class ;
+                  rdfs:subClassOf :SimulationStep ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasOutputParameter ;
+                                    owl:someValuesFrom :CurieTemperature
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasConfiguration ;
+                                    owl:allValuesFrom :SpinDynamicsConfiguration
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty :hasScaleLevel ;
+                                    owl:hasValue :AtomisticScale
+                                  ] ;
+                  rdfs:comment "An atomistic spin dynamics simulation (e.g., UppASD) that computes temperature-dependent magnetic properties: magnetization M(T), Curie temperature Tc, and temperature-dependent anisotropy K(T)."@en ;
+                  rdfs:label "SpinDynamicsStep" ;
+                  <http://www.w3.org/2004/02/skos/core#altLabel> "stochastic landau-lifshitz-gilbert"@en ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "SpinDynamicsStep"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Spinhamiltonian
+:Spinhamiltonian rdf:type owl:Class ;
+                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                   owl:onProperty :hasScaleLevel ;
+                                   owl:hasValue :Atomisticscale
+                                 ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Spinheisenberghamiltonian
+:Spinheisenberghamiltonian rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Atomisticscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Spinmagnetization
+:Spinmagnetization rdf:type owl:Class ;
+                   rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                     owl:onProperty :hasScaleLevel ;
+                                     owl:hasValue :Electronicscale
+                                   ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Spinwavestiffnessconstant
+:Spinwavestiffnessconstant rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Atomisticscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Stabilizationenergy
+:Stabilizationenergy rdf:type owl:Class ;
+                     rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                       owl:onProperty :hasScaleLevel ;
+                                       owl:hasValue :Atomisticscale
+                                     ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#StepStatus
+:StepStatus rdf:type owl:Class ;
+            owl:equivalentClass [ rdf:type owl:Class ;
+                                  owl:oneOf ( :Converged
+                                              :Failed
+                                              :Running
+                                            )
+                                ] ;
+            rdfs:comment "The execution status of a simulation step: Converged (completed successfully), Failed (did not converge or crashed), or Running (in progress)."@en ;
+            rdfs:label "StepStatus" ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "StepStatus"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#StochasticLandauLifshitzGilbertEquation
+:StochasticLandauLifshitzGilbertEquation rdf:type owl:Class ;
+                                         rdfs:subClassOf <https://w3id.org/emmo#AtomisticModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Stochasticlandaulifshitzequation
+:Stochasticlandaulifshitzequation rdf:type owl:Class ;
+                                  rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                    owl:onProperty :hasScaleLevel ;
+                                                    owl:hasValue :Atomisticscale
+                                                  ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Stochasticlandaulifshitzgilbert
+:Stochasticlandaulifshitzgilbert rdf:type owl:Class ;
+                                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                   owl:onProperty :hasScaleLevel ;
+                                                   owl:hasValue :Atomisticscale
+                                                 ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Stochasticlandaulifshitzgilbertequation
+:Stochasticlandaulifshitzgilbertequation rdf:type owl:Class ;
+                                         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                           owl:onProperty :hasScaleLevel ;
+                                                           owl:hasValue :Atomisticscale
+                                                         ] ,
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty :hasScaleLevel ;
+                                                           owl:hasValue :Mesoscopicscale
+                                                         ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Structuralrelaxation
+:Structuralrelaxation rdf:type owl:Class ;
+                      rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                        owl:onProperty :hasScaleLevel ;
+                                        owl:hasValue :Electronicscale
+                                      ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Superparamagneticbehavior
+:Superparamagneticbehavior rdf:type owl:Class ;
+                           rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                             owl:onProperty :hasScaleLevel ;
+                                             owl:hasValue :Mesoscopicscale
+                                           ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TableSource
+:TableSource rdf:type owl:Class ;
+             rdfs:subClassOf :PropertySource ;
+             rdfs:comment "A property value extracted from a table in a publication."@en ;
+             rdfs:label "TableSource" ;
+             <http://www.w3.org/2004/02/skos/core#prefLabel> "TableSource"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TemperatureDependentProperty
+:TemperatureDependentProperty rdf:type owl:Class ;
+                              rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                owl:onProperty :atTemperature ;
+                                                owl:cardinality "1"^^xsd:nonNegativeInteger
+                                              ] ;
+                              rdfs:comment "A magnetic property value reported or computed at a specific temperature. Essential for comparing values across studies that use different measurement/simulation temperatures."@en ;
+                              rdfs:label "TemperatureDependentProperty" ;
+                              <http://www.w3.org/2004/02/skos/core#prefLabel> "TemperatureDependentProperty"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Tetrataenite
+:Tetrataenite rdf:type owl:Class ;
+              rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystallineMagneticMaterial> ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :hasProperty ;
+                                owl:someValuesFrom <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyConstantK1>
+                              ] ;
+              rdfs:comment "Tetrataenite (L1₀-ordered FeNi) is a distinct crystalline magnetic phase considered a gap permanent magnet candidate; it is not expressible by any existing class in the 3-tier ontology and requires a new class under magmo:CrystallineMagneticMaterial."@en ;
+              rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+              rdfs:label "tetrataenite" ;
+              <http://www.w3.org/2004/02/skos/core#note> "What is tetrataenite used for? — considered a candidate gap permanent magnet material"@en ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "tetrataenite"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TextSource
+:TextSource rdf:type owl:Class ;
+            rdfs:subClassOf :PropertySource ;
+            rdfs:comment "A property value extracted from running text in a publication."@en ;
+            rdfs:label "TextSource" ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "TextSource"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TheoreticalEnergyProductLimit
+:TheoreticalEnergyProductLimit rdf:type owl:Class ;
+                               rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MaximumEnergyProduct> ;
+                               rdfs:comment "Theoretical energy product limit is a derived upper-bound quantity distinct from the measured magmo:MaximumEnergyProduct; it requires a new subclass under magmo:MaximumEnergyProduct to represent the theoretically computed ceiling value assuming ideal microstructure."@en ;
+                               rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                               rdfs:label "theoretical energy product limit" ;
+                               <http://www.w3.org/2004/02/skos/core#prefLabel> "theoretical energy product limit"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TwistGrainBoundary
+:TwistGrainBoundary rdf:type owl:Class ;
+                    rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#GrainBoundaryPhase> ;
+                    rdfs:comment "A twist grain boundary (basal-plane boundary between c-axis aligned grains, weak pinning centre) is a rigid, sortal subtype of grain boundary not captured by any existing magmo: annotation on magmo:GrainBoundaryPhase; a new subclass is required to distinguish it from tilt and general grain boundaries."@en ;
+                    rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                    rdfs:label "twist grain boundary" ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "twist grain boundary"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TwoSublatticeMeanFieldModel
+:TwoSublatticeMeanFieldModel rdf:type owl:Class ;
+                             rdfs:subClassOf <https://w3id.org/emmo#AtomisticModel> .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Twosublatticemicromagneticmodel
+:Twosublatticemicromagneticmodel rdf:type owl:Class ;
+                                 rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                   owl:onProperty :hasScaleLevel ;
+                                                   owl:hasValue :Mesoscopicscale
+                                                 ] .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#UniaxialCrystalStructure
+:UniaxialCrystalStructure rdf:type owl:Class ;
+                          rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#CrystalStructure> ;
+                          rdfs:comment "A uniaxial crystal structure is a specialisation of magmo:CrystalStructure distinguished by hexagonal/tetragonal/rhombohedral symmetry and a unique easy-axis; no existing class in the 3-tier ontology captures this symmetry-plus-anisotropy combination, so a new subclass under magmo:CrystalStructure is required."@en ;
+                          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                          rdfs:label "uniaxial crystal structure" ;
+                          <http://www.w3.org/2004/02/skos/core#prefLabel> "uniaxial crystal structure"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ZeemanEnergyDensity
+:ZeemanEnergyDensity rdf:type owl:Class ;
+                     rdfs:subClassOf <https://w3id.org/emmo/domain/magnetic-material#MagnetocrystallineAnisotropyEnergy> ;
+                     rdfs:comment "Zeeman energy density is a distinct micromagnetic energy density term (-μ₀Ms·H) not expressible by any existing magmo: class; magmo:MagnetocrystallineAnisotropyEnergy is the closest structural analogue as a volumetric magnetic energy density, satisfying the GAP criterion for a new subclass in M3_Material."@en ;
+                     rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                     rdfs:label "zeeman energy density" ;
+                     <http://www.w3.org/2004/02/skos/core#prefLabel> "zeeman energy density"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#FixedSpinMoment(fsm)Calculation
+<https://w3id.org/emmo/domain/pm-multiscale#FixedSpinMoment(fsm)Calculation> rdf:type owl:Class ;
+                                                                             rdfs:subClassOf <https://w3id.org/emmo#Computation> ;
+                                                                             rdfs:comment "Fixed spin moment (FSM) calculation is a constrained DFT method in which the total magnetic moment is fixed to study magnetisation-dependent properties of permanent magnets; it is a sub-method of pm:DFTStep not currently represented as a distinct class, warranting a new subclass under emmo:Computation."@en ;
+                                                                             rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                                                                             rdfs:label "fixed spin moment (fsm) calculation" ;
+                                                                             <http://www.w3.org/2004/02/skos/core#note> "What is fixed spin moment calculation used for? — to study the dependence of magnetic properties on magnetization magnitude"@en ;
+                                                                             <http://www.w3.org/2004/02/skos/core#prefLabel> "fixed spin moment (fsm) calculation"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  https://w3id.org/emmo/domain/pm-multiscale#AndersonImpurityModel
+:AndersonImpurityModel rdf:type owl:NamedIndividual ;
+                       :hasScaleLevel :ElectronicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#AtomisticScale
+:AtomisticScale rdf:type owl:NamedIndividual ,
+                         :ScaleLevel ;
+                <http://www.w3.org/2004/02/skos/core#prefLabel> "AtomisticScale"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Atomisticscale
+:Atomisticscale rdf:type owl:NamedIndividual .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ClassicalHeisenbergModel
+:ClassicalHeisenbergModel rdf:type owl:NamedIndividual ;
+                          :hasScaleLevel :AtomisticScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ContinuumApproximation
+:ContinuumApproximation rdf:type owl:NamedIndividual ,
+                                 :ScaleBridgingAssumption ;
+                        rdfs:comment "Maps discrete atomistic spin configurations to continuous magnetization field M(r), valid when domain features are much larger than atomic spacing."@en ;
+                        <http://www.w3.org/2004/02/skos/core#prefLabel> "Continuum approximation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Converged
+:Converged rdf:type owl:NamedIndividual ,
+                    :StepStatus ;
+           <http://www.w3.org/2004/02/skos/core#prefLabel> "Converged"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#CrystalFieldTheory
+:CrystalFieldTheory rdf:type owl:NamedIndividual ;
+                    :hasScaleLevel :ElectronicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainNucleation
+:DomainNucleation rdf:type owl:NamedIndividual ;
+                  :hasScaleLevel :MesoscopicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallMotion
+:DomainWallMotion rdf:type owl:NamedIndividual ;
+                  :hasScaleLevel :MesoscopicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DomainWallPropagation
+:DomainWallPropagation rdf:type owl:NamedIndividual ;
+                       :hasScaleLevel :MesoscopicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#DynamicalMeanFieldTheory
+:DynamicalMeanFieldTheory rdf:type owl:NamedIndividual ;
+                          :hasScaleLevel :ElectronicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#ElectronicScale
+:ElectronicScale rdf:type owl:NamedIndividual ,
+                          :ScaleLevel ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "ElectronicScale"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Electronicscale
+:Electronicscale rdf:type owl:NamedIndividual .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Failed
+:Failed rdf:type owl:NamedIndividual ,
+                 :StepStatus ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel> "Failed"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#GGA_Plus_U
+:GGA_Plus_U rdf:type owl:NamedIndividual ,
+                     :ExchangeCorrelationFunctional ;
+            <http://www.w3.org/2004/02/skos/core#prefLabel> "GGA+U"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HeisenbergModelHamiltonian
+:HeisenbergModelHamiltonian rdf:type owl:NamedIndividual ;
+                            :hasScaleLevel :AtomisticScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#HubbardIApproximation
+:HubbardIApproximation rdf:type owl:NamedIndividual ;
+                       :hasScaleLevel :ElectronicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#LDA
+:LDA rdf:type owl:NamedIndividual ,
+              :ExchangeCorrelationFunctional ;
+     <http://www.w3.org/2004/02/skos/core#prefLabel> "LDA"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagneticForceTheorem
+:MagneticForceTheorem rdf:type owl:NamedIndividual ;
+                      :hasScaleLevel :ElectronicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MagnetizationReversal
+:MagnetizationReversal rdf:type owl:NamedIndividual ;
+                       :hasScaleLevel :MesoscopicScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MeanFieldApproximation
+:MeanFieldApproximation rdf:type owl:NamedIndividual ,
+                                 :ScaleBridgingAssumption ;
+                        rdfs:comment "Maps DFT-computed exchange integrals to the Heisenberg Hamiltonian, treating spin-spin interactions in a mean-field framework."@en ;
+                        <http://www.w3.org/2004/02/skos/core#prefLabel> "Mean-field approximation"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#MesoscopicScale
+:MesoscopicScale rdf:type owl:NamedIndividual ,
+                          :ScaleLevel ;
+                 <http://www.w3.org/2004/02/skos/core#prefLabel> "MesoscopicScale"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Mesoscopicscale
+:Mesoscopicscale rdf:type owl:NamedIndividual .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#OpenBoundary
+:OpenBoundary rdf:type owl:NamedIndividual ,
+                       :BoundaryCondition ;
+              <http://www.w3.org/2004/02/skos/core#prefLabel> "OpenBoundaryCondition"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PBE
+:PBE rdf:type owl:NamedIndividual ,
+              :ExchangeCorrelationFunctional ;
+     <http://www.w3.org/2004/02/skos/core#prefLabel> "PBE"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#PeriodicBoundary
+:PeriodicBoundary rdf:type owl:NamedIndividual ,
+                           :BoundaryCondition ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "PeriodicBoundaryCondition"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#Running
+:Running rdf:type owl:NamedIndividual ,
+                  :StepStatus ;
+         <http://www.w3.org/2004/02/skos/core#prefLabel> "Running"@en .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#StochasticLandauLifshitzGilbertEquation
+:StochasticLandauLifshitzGilbertEquation rdf:type owl:NamedIndividual ;
+                                         :hasScaleLevel :AtomisticScale .
+
+
+###  https://w3id.org/emmo/domain/pm-multiscale#TwoSublatticeMeanFieldModel
+:TwoSublatticeMeanFieldModel rdf:type owl:NamedIndividual ;
+                             :hasScaleLevel :AtomisticScale .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+:AmorphousGrainBoundaryPhase <http://www.w3.org/2004/02/skos/core#note> "What is the amorphous grain boundary phase used for? — provides magnetic isolation between SmFe12 grains"@en .
+
+
+:AndersonImpurityModel rdfs:comment "The Anderson impurity model describes hybridisation of localised 4f states with conduction electrons in rare-earth PM compounds; it is IN_SCOPE as an electronic-structure model and a GAP because emmo:ElectronicModel has no sub-class for quantum impurity models distinct from DFT or tight-binding approaches."@en ;
+                       rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                       rdfs:label "anderson impurity model" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "anderson impurity model"@en .
+
+
+:AndersonModel <http://www.w3.org/2004/02/skos/core#note> "What is the Anderson model used for? — from which the Kondo model is derived via the Schrieffer-Wolff transformation"@en .
+
+
+:ClassicalHeisenbergModel rdfs:comment "The classical Heisenberg model is an atomistic spin Hamiltonian parameterized by exchange coupling constants Jij used to compute Curie temperature; it is a canonical emmo:AtomisticModel for spin-lattice simulations, and no existing pm: class represents this Hamiltonian model."@en ;
+                          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                          rdfs:label "classical heisenberg model" ;
+                          <http://www.w3.org/2004/02/skos/core#prefLabel> "classical heisenberg model"@en .
+
+
+:CoherentPotentialApproximation <http://www.w3.org/2004/02/skos/core#note> "How are electronic and magnetic properties of disordered alloys computed? — effective medium theory used to compute electronic and magnetic properties of disordered alloys by replacing the random potential with an effective coherent potential"@en .
+
+
+:CrystalFieldTheory rdfs:comment "Crystal field theory is a quantum-mechanical framework computing electrostatic interactions between rare-earth 4f electrons and the surrounding crystal lattice, directly relevant to magnetocrystalline anisotropy in permanent magnets; it is an emmo:ElectronicModel, and no existing pm: class captures this ligand-field approach."@en ;
+                    rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                    rdfs:label "crystal field theory" ;
+                    <http://www.w3.org/2004/02/skos/core#note> "How is crystal field theory computed? — using point charge model to calculate the electrostatic interaction between rare-earth ion 4f electrons and surrounding crystal environment"@en ;
+                    <http://www.w3.org/2004/02/skos/core#prefLabel> "crystal field theory"@en .
+
+
+:DepinningCoercivity <http://www.w3.org/2004/02/skos/core#note> "What is depinning coercivity used for? — determining coercivity in the depinning-type magnetization reversal mechanism"@en .
+
+
+:DipoleField <http://www.w3.org/2004/02/skos/core#note> "How is the dipole field computed? — computed via the demagnetization tensor"@en .
+
+
+:DomainNucleation rdfs:comment "Domain nucleation is a magnetisation-reversal mechanism central to coercivity modelling in permanent magnets; no existing pm: or magmo: class captures nucleation as a distinct process, requiring a new subclass under pm:MicromagneticsStep."@en ;
+                  rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                  rdfs:label "domain nucleation" ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "domain nucleation"@en .
+
+
+:DomainWallMotion rdfs:comment "Domain wall motion is a distinct magnetization-change process simulated in micromagnetics workflows (pm:MicromagneticsStep) but not represented as its own class; a new subclass is needed per the gap criterion."@en ;
+                  rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                  rdfs:label "domain wall motion" ;
+                  <http://www.w3.org/2004/02/skos/core#note> "What is domain wall motion used for? — the primary mechanism of magnetization change in materials with well-defined domain structures"@en ;
+                  <http://www.w3.org/2004/02/skos/core#prefLabel> "domain wall motion"@en .
+
+
+:DomainWallPropagation rdfs:comment "Domain wall propagation is a magnetisation-reversal mechanism (Barkhausen jumps) central to coercivity in permanent magnets and modelled in micromagnetics; no existing pm: or magmo: class captures wall motion as a distinct process."@en ;
+                       rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                       rdfs:label "domain wall propagation" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "domain wall propagation"@en .
+
+
+:DynamicalMeanFieldTheory rdfs:comment "Dynamical mean-field theory (DMFT) is a many-body electronic-structure method treating local electron correlations beyond DFT, applied to Sm 4f electrons in permanent magnet calculations; it is a subclass of emmo:ElectronicModel, and no existing pm: class covers correlated-electron many-body methods."@en ;
+                          rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                          rdfs:label "dynamical mean-field theory" ;
+                          <http://www.w3.org/2004/02/skos/core#note> "How is dynamical mean-field theory computed? — applied here with the Hubbard I approximation for Sm 4f electrons and STPF solver for Co 3d electrons"@en ,
+                                                                     "What is dynamical mean field theory used for? — combined with first-principles band structure calculations for finite-temperature magnetism"@en ;
+                          <http://www.w3.org/2004/02/skos/core#prefLabel> "dynamical mean-field theory"@en .
+
+
+:EffectiveAnisotropyField <http://www.w3.org/2004/02/skos/core#note> "What is the effective anisotropy field used for? — used in the LLG equation to compute resonance frequency"@en .
+
+
+:FccStructure <http://www.w3.org/2004/02/skos/core#note> "What transformation must fcc structure undergo to acquire hard magnetic properties? — must be transformed to fct for hard magnetic properties"@en .
+
+
+:FermiDiracSmearing <http://www.w3.org/2004/02/skos/core#note> "How are Kohn-Sham states occupied in DFT calculations? — Fermi-Dirac distribution with width 0.01 eV used to occupy Kohn-Sham states in the DFT calculation"@en .
+
+
+:ForceTheorem <http://www.w3.org/2004/02/skos/core#note> "What is the force theorem used for? — used to calculate magnetocrystalline anisotropy energy by comparing band energies along different magnetization directions"@en .
+
+
+:FullPotentialLinearMuffinTinOrbitalMethod <http://www.w3.org/2004/02/skos/core#note> "How is the full-potential linear muffin-tin orbital method implemented? — implemented in RSPt"@en .
+
+
+:FullPotentialLmtoMethod <http://www.w3.org/2004/02/skos/core#note> "How is magnetocrystalline anisotropy energy computed using the full-potential LMTO method? — A full-potential linear muffin-tin orbital computational method (RSPt code) used to compute magnetocrystalline anisotropy energy with spin-orbit coupling treated post-SCF"@en .
+
+
+:GaussianDistributionOfEasyAxes <http://www.w3.org/2004/02/skos/core#note> "What does the Gaussian distribution of easy axes describe? — used to describe the angular spread of grain easy axes in oriented nanocrystalline magnets"@en .
+
+
+:HeisenbergModelHamiltonian rdfs:comment "The Heisenberg model Hamiltonian is the classical spin Hamiltonian parameterising pairwise exchange interactions between atomic sites in PM spin-dynamics simulations; it is IN_SCOPE and a GAP because pm:SpinDynamicsConfiguration covers solver/configuration settings but not the Hamiltonian functional form as a model class."@en ;
+                            rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                            rdfs:label "heisenberg model hamiltonian" ;
+                            <http://www.w3.org/2004/02/skos/core#prefLabel> "heisenberg model hamiltonian"@en .
+
+
+:HubbardIApproximation rdfs:comment "The Hubbard-I approximation is a many-body electronic-structure method for treating localised 4f electrons in rare-earth PM compounds; it is IN_SCOPE and a GAP because pm:ExchangeCorrelationFunctional covers DFT XC functionals but not beyond-DFT many-body impurity solvers."@en ;
+                       rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                       rdfs:label "hubbard i approximation" ;
+                       <http://www.w3.org/2004/02/skos/core#note> "How is the Hubbard I approximation computed? — neglecting hybridization in the DMFT impurity problem, approximating the self-energy by the atomic self-energy"@en ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "hubbard i approximation"@en .
+
+
+:HubbardUPotential <http://www.w3.org/2004/02/skos/core#note> "How is the Hubbard U potential computed? — A phenomenological on-site Coulomb correction term added to DFT to better describe strongly correlated d or f electrons"@en .
+
+
+:InPlaneMagneticAnisotropy <http://www.w3.org/2004/02/skos/core#note> "What is in-plane magnetic anisotropy used for? — which is unfavorable for permanent magnet applications"@en .
+
+
+:IntersiteExchangeCouplingParameter <http://www.w3.org/2004/02/skos/core#note> "How is the intersite exchange coupling parameter computed? — calculated via linear-response to small-angle spin fluctuations"@en .
+
+
+:IsothermalRemanentMagnetization <http://www.w3.org/2004/02/skos/core#note> "What is isothermal remanent magnetization used for? — used to construct Henkel plots"@en .
+
+
+:MagneticExchangeConstant <http://www.w3.org/2004/02/skos/core#note> "How is the magnetic exchange constant computed? — obtained via the Liechtenstein real-space approach using SPR-KKR"@en .
+
+
+:MagneticForceTheorem rdfs:comment "The magnetic force theorem is a first-principles electronic-structure method for computing intersite exchange parameters Jij via second derivatives of total energy w.r.t. spin rotations; it fits under emmo:ElectronicModel as a quantum-mechanical computational approach, and no existing pm: or magmo: class captures this specific perturbative energy-derivative technique."@en ;
+                      rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                      rdfs:label "magnetic force theorem" ;
+                      <http://www.w3.org/2004/02/skos/core#note> "How are exchange parameters Jij computed using the magnetic force theorem? — computing intersite exchange parameters Jij from the second derivative of the total energy with respect to spin rotations, without performing full self-consistent calculations"@en ;
+                      <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetic force theorem"@en .
+
+
+:MagneticHyperfineField <http://www.w3.org/2004/02/skos/core#note> "How is the magnetic hyperfine field measured? — measured by Mössbauer spectroscopy"@en ,
+                                                                   "What is the magnetic hyperfine field used for? — used to estimate local magnetic moments"@en .
+
+
+:MagneticPermeabilityOfVacuum <http://www.w3.org/2004/02/skos/core#note> "What is the magnetic permeability of vacuum used for? — used in the magnetostatic potential equations for the conical magnet"@en .
+
+
+:MagnetizationReversal rdfs:comment "Magnetization reversal is a core micromagnetic process simulated in pm:MicromagneticsStep workflows but is not itself an existing class; a new subclass under pm:MicromagneticsStep captures the switching process per the gap criterion."@en ;
+                       rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                       rdfs:label "magnetization reversal" ;
+                       <http://www.w3.org/2004/02/skos/core#prefLabel> "magnetization reversal"@en .
+
+
+:MagnetostaticField <http://www.w3.org/2004/02/skos/core#note> "What is the magnetostatic field used for? — contributing to spin disorder"@en .
+
+
+:MonteCarloAlgorithm <http://www.w3.org/2004/02/skos/core#note> "What is the Monte Carlo algorithm used for? — used to calculate equilibrium magnetic properties such as temperature-dependent magnetization by averaging over thermally accessible spin configurations"@en .
+
+
+:MonteCarloStep <http://www.w3.org/2004/02/skos/core#note> "How is a Monte Carlo step defined? — corresponding to one attempted spin flip per lattice site on average"@en .
+
+
+:MuffinTinApproximation <http://www.w3.org/2004/02/skos/core#note> "How is the crystal potential approximated in the muffin-tin approximation? — crystal potential is spherically symmetric within non-overlapping spheres (muffin tins) centered on each atom and constant in the interstitial region"@en .
+
+
+:NoncollinearMagneticCalculation <http://www.w3.org/2004/02/skos/core#note> "How is a noncollinear magnetic calculation performed? — A DFT calculation in which spin directions are not constrained to be parallel or antiparallel, allowing treatment of spin canting, spin spirals, and complex magnetic textures"@en .
+
+
+:QuasiharmonicApproximation <http://www.w3.org/2004/02/skos/core#note> "How is the quasiharmonic approximation computed? — sampling phonon modes at the Gamma point of a supercell, accounting for volume-dependent frequency changes"@en .
+
+
+:SelfConsistentFieldCalculation <http://www.w3.org/2004/02/skos/core#note> "How is the self-consistent field calculation performed? — Iterative DFT procedure to solve the Kohn-Sham equations self-consistently to obtain the ground-state electron density and magnetic moments"@en .
+
+
+:StochasticLandauLifshitzGilbert <http://www.w3.org/2004/02/skos/core#note> "What is the stochastic Landau-Lifshitz-Gilbert method used for? — used in related coercivity studies"@en .
+
+
+:StochasticLandauLifshitzGilbertEquation rdfs:comment "The stochastic LLG equation is an atomistic spin-dynamics equation of motion augmented with a Langevin noise term for thermal fluctuations; it extends the deterministic LLG and belongs under emmo:AtomisticModel, while pm:SpinDynamicsConfiguration could hold its configuration parameters but does not represent the model itself."@en ;
+                                         rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                                         rdfs:label "stochastic landau-lifshitz-gilbert equation" ;
+                                         <http://www.w3.org/2004/02/skos/core#note> "What is the stochastic LLG equation used for? — enabling simulation of thermally activated magnetization reversal"@en ;
+                                         <http://www.w3.org/2004/02/skos/core#prefLabel> "stochastic landau-lifshitz-gilbert equation"@en .
+
+
+:TemperatureCoefficientOfRemanence <http://www.w3.org/2004/02/skos/core#note> "What is the temperature coefficient of remanence used for? — a key figure of merit for high-temperature permanent magnet applications"@en .
+
+
+:TwoSublatticeMeanFieldModel rdfs:comment "The two-sublattice mean-field model describes RE-TM magnetic coupling via molecular field coefficients and is directly used to compute temperature-dependent magnetisation in PM materials; it is IN_SCOPE and a GAP because emmo:AtomisticModel has no sub-class for sublattice mean-field exchange models."@en ;
+                             rdfs:isDefinedBy <https://w3id.org/emmo/domain/pm-multiscale> ;
+                             rdfs:label "two-sublattice mean field model" ;
+                             <http://www.w3.org/2004/02/skos/core#note> "What is the two-sublattice mean field model used for? — A model describing magnetic coupling between rare earth and transition metal sublattices"@en ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel> "two-sublattice mean field model"@en .
+
+
+:TwoSublatticeMicromagneticModel <http://www.w3.org/2004/02/skos/core#note> "What is the two-sublattice micromagnetic model used for? — to describe the magnetic excitation spectrum including acoustic, optic, and crystal-field modes"@en .
+
+
+:VacuumPermeability <http://www.w3.org/2004/02/skos/core#note> "What is vacuum permeability used for? — used as a fundamental constant in the magnetic equations"@en .
+
+
+:VibratingSampleMagnetometer <http://www.w3.org/2004/02/skos/core#note> "How is magnetization measured as a function of applied field and temperature? — An instrument (VSM) used to measure magnetization as a function of applied field and temperature"@en .
+
+
+<https://w3id.org/emmo/domain/pm-multiscale#1:5Phase> <http://www.w3.org/2004/02/skos/core#note> "What is the 1:5 phase used for? — used in SmCo5 and PrCo5 permanent magnets"@en .
+
+
+<https://w3id.org/emmo/domain/pm-multiscale#EnergyProductDifference(δ(bh)max)> <http://www.w3.org/2004/02/skos/core#note> "What is the energy product difference used for? — used as a measure of magnetic anisotropy"@en .
+
+
+<https://w3id.org/emmo/domain/pm-multiscale#FullPotentialLinearizedAugmentedPlaneWave(flapw)Method> <http://www.w3.org/2004/02/skos/core#note> "How is the FLAPW method implemented? — implemented in WIEN2k"@en .
+
+
+<https://w3id.org/emmo/domain/pm-multiscale#IdealEnergyProduct(2πms)2> <http://www.w3.org/2004/02/skos/core#note> "What is the ideal energy product used for? — used as a benchmark for comparing experimental energy products"@en .
+
+
+<https://w3id.org/emmo/domain/pm-multiscale#KkrGreen'sFunctionMethod> <http://www.w3.org/2004/02/skos/core#note> "How is the KKR Green's function method used? — used to solve the Kohn-Sham equations in density functional theory calculations"@en .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :DFTConfiguration
+                :MicromagneticsConfiguration
+                :SpinDynamicsConfiguration
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :DFTStep
+                :MicromagneticsStep
+                :SpinDynamicsStep
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :FigureSource
+                :TableSource
+                :TextSource
+              )
+] .
+
+
+###  Generated by the OWL API (version 5.1.18) https://github.com/owlcs/owlapi/

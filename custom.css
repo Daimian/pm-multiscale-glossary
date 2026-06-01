@@ -1,0 +1,60 @@
+/* custom.css — appended to Widoco output, overrides only. */
+
+:root {
+    --pm-primary: #2c5282;
+    --pm-bg: #f7fafc;
+    --pm-text: #1a202c;
+    --pm-border: #e2e8f0;
+}
+
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--pm-text);
+    line-height: 1.6;
+}
+
+#header {
+    background: var(--pm-primary);
+    color: white;
+    padding: 1rem 2rem;
+}
+
+/* Version nav bar */
+.pm-version-nav {
+    background: var(--pm-bg);
+    border-bottom: 1px solid var(--pm-border);
+    padding: 0.5rem 2rem;
+    font-size: 0.875rem;
+}
+
+.pm-version-nav a {
+    margin-right: 1rem;
+    color: var(--pm-primary);
+    text-decoration: none;
+}
+
+.pm-version-nav a.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* i18n toggle */
+.pm-lang-toggle {
+    float: right;
+    font-size: 0.875rem;
+}
+
+.pm-lang-toggle a {
+    margin-left: 0.5rem;
+    color: var(--pm-primary);
+}
+
+.pm-lang-toggle a.active {
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body { padding: 0 1rem; }
+    table { display: block; overflow-x: auto; }
+}
